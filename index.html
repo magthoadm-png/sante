@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VitalCheck</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root {
+  --bg:#f0f4f8; --card:#ffffff; --border:#dde3ed; --accent:#1d4ed8;
+  --accent-light:#eff4ff; --text:#111827; --muted:#6b7280;
+  --ok:#15803d; --ok-bg:#f0fdf4; --ok-border:#bbf7d0;
+  --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
+  --danger:#b91c1c; --danger-bg:#fef2f2; --danger-border:#fecaca;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{font-size:18px;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:24px 16px 100px;line-height:1.4;}
+h1{font-size:2rem;font-weight:800;color:var(--accent);margin-bottom:4px;}
+.sub{color:var(--muted);font-size:0.85rem;margin-bottom:24px;}
+.panel{display:none;animation:fi 0.2s ease;}
+.panel.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.ct{font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px;margin-bottom:16px;}
+.big{font-size:3.8rem;font-weight:800;line-height:1;color:var(--text);}
+.unit{font-size:1.1rem;color:var(--muted);margin-left:4px;font-weight:500;}
+.badge{display:inline-flex;align-items:center;padding:6px 14px;border-radius:24px;font-size:0.82rem;font-weight:600;margin-top:8px;}
+.badge.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-border);}
+.badge.warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border);}
+.badge.danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border);}
+label{font-size:0.85rem;font-weight:600;color:var(--muted);display:block;margin:16px 0 6px;}
+input[type=number],input[type=text],input[type=time]{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:14px;color:var(--text);font-family:'Inter',sans-serif;font-size:1.2rem;font-weight:500;padding:14px 16px;outline:none;transition:border-color .2s;}
+input:focus{border-color:var(--accent);background:#fff;}
+input::placeholder{color:#9ca3af;font-size:1rem;}
+.row{display:flex;gap:10px;align-items:flex-end;margin-top:12px;}
+.row input{margin-top:0;}
+.two-input{display:flex;gap:10px;}
+.two-input>div{flex:1;}
+.btn{padding:14px 20px;border-radius:14px;border:none;font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.ba{background:var(--accent);color:#fff;}.ba:active{transform:scale(.96);}
+.bo{background:transparent;border:2px solid var(--border);color:var(--muted);}
+.bd{background:var(--danger-bg);color:var(--danger);border:1.5px solid var(--danger-border);}
+.bw{background:#f59e0b;color:#fff;border:none;}
+.med-row{display:flex;align-items:center;gap:14px;padding:18px;border-radius:16px;background:var(--bg);border:2px solid var(--border);margin-bottom:12px;transition:all .2s;}
+.med-row.taken{border-color:var(--ok-border);background:var(--ok-bg);}
+.med-ico{font-size:2rem;flex-shrink:0;}
+.med-name{font-size:1.15rem;font-weight:700;}
+.med-sub{font-size:0.82rem;color:var(--muted);margin-top:3px;}
+.med-time{font-size:0.8rem;color:var(--accent);font-weight:600;margin-top:4px;}
+.chk{margin-left:auto;width:50px;height:50px;border-radius:50%;border:2.5px solid var(--border);background:#fff;color:var(--muted);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.chk.done{background:var(--ok);border-color:var(--ok);color:#fff;}
+.sbar-bg{height:8px;background:var(--bg);border-radius:4px;margin:10px 0 6px;overflow:hidden;border:1px solid var(--border);}
+.sbar-fill{height:100%;border-radius:4px;transition:width .5s ease;}
+.sep{height:1.5px;background:var(--border);margin:20px 0;}
+.two{display:flex;gap:12px;margin-bottom:16px;}
+.two .card{flex:1;margin-bottom:0;}
+.hi{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1.5px solid var(--border);}
+.hi:last-child{border-bottom:none;}
+.hv{font-size:1.15rem;font-weight:700;}
+.hd{color:var(--muted);font-size:0.8rem;margin-top:3px;}
+.trend{font-size:0.85rem;margin-top:6px;font-weight:500;}
+.trend.up{color:var(--danger);}.trend.down{color:var(--ok);}.trend.neutral{color:var(--muted);}
+.wh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;}
+.goal-chip{background:var(--accent-light);color:var(--accent);font-size:0.82rem;padding:6px 14px;border-radius:24px;font-weight:600;margin-top:8px;border:1px solid #bfdbfe;}
+.pb-bg{height:10px;background:var(--bg);border-radius:5px;overflow:hidden;border:1.5px solid var(--border);margin:12px 0 6px;}
+.pb-fill{height:100%;border-radius:5px;background:var(--accent);transition:width .6s ease;}
+.legend{display:flex;gap:16px;margin:6px 0 4px;}
+.li{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:var(--muted);font-weight:500;}
+.ld{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.chart-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:10px;}
+.chart-wrap::-webkit-scrollbar{display:none;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(16px);background:#111827;color:#fff;padding:14px 28px;border-radius:24px;font-size:1rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1.5px solid var(--border);display:flex;justify-content:space-around;padding:10px 0 16px;z-index:100;box-shadow:0 -2px 16px rgba(0,0,0,0.07);}
+.ni{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 18px;border-radius:14px;transition:all .2s;color:var(--muted);font-size:0.72rem;font-weight:600;}
+.ni.active{color:var(--accent);}
+.ni-ico{font-size:1.6rem;}
+.empty{color:var(--muted);font-size:0.9rem;text-align:center;padding:24px 0;}
+.bp-num{font-size:2.2rem;font-weight:800;line-height:1.1;}
+.alarm-info{background:var(--accent-light);border:1.5px solid #bfdbfe;border-radius:14px;padding:14px 16px;margin-bottom:12px;}
+.alarm-info p{font-size:0.85rem;color:var(--accent);font-weight:600;margin-bottom:4px;}
+.alarm-info span{font-size:0.8rem;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<h1>VitalCheck</h1>
+<p class="sub" id="date-label"></p>
+
+<!-- MEDICAMENTS -->
+<div id="panel-med" class="panel active">
+  <div class="card">
+    <div class="ct">💊 Aujourd'hui</div>
+    <div id="med-list"></div>
+    <div class="sep"></div>
+    <div class="ct" style="margin-bottom:12px;">Stock</div>
+    <div id="stock-display"></div>
+    <div class="sep"></div>
+    <div class="ct" style="margin-bottom:12px;">Ajouter un médicament</div>
+    <label>Nom</label>
+    <input type="text" id="nm-name" placeholder="ex: Amlodipine">
+    <label>Stock actuel (comprimés)</label>
+    <input type="number" id="nm-stock" placeholder="ex: 30">
+    <label>Seuil d'alerte (comprimés restants)</label>
+    <input type="number" id="nm-alert" placeholder="ex: 7">
+    <div class="two-input">
+      <div>
+        <label>Heure semaine</label>
+        <input type="time" id="nm-time-week" value="08:45">
+      </div>
+      <div>
+        <label>Heure week-end</label>
+        <input type="time" id="nm-time-wknd" value="11:00">
+      </div>
+    </div>
+    <div style="margin-top:18px;">
+      <button class="btn ba" onclick="addMed()" style="width:100%;">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- POIDS -->
+<div id="panel-weight" class="panel">
+  <div class="card">
+    <div class="ct">Poids actuel</div>
+    <div class="wh">
+      <div>
+        <div class="big" id="w-val">--<span class="unit">kg</span></div>
+        <div id="w-trend"></div>
+      </div>
+      <div id="goal-chip" class="goal-chip" style="display:none;"></div>
+    </div>
+    <div id="w-badge"></div>
+    <div class="pb-bg"><div class="pb-fill" id="w-prog" style="width:0%"></div></div>
+    <div id="w-prog-lbl" style="font-size:0.8rem;color:var(--muted);margin-top:4px;"></div>
+    <div class="sep"></div>
+    <label>Peser aujourd'hui (kg)</label>
+    <div class="row">
+      <input type="number" id="w-input" placeholder="ex: 82.4" step="0.1">
+      <button class="btn ba" onclick="logW()">OK</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">Courbe de poids</div>
+    <div class="legend">
+      <div class="li"><div class="ld" style="background:#1d4ed8"></div>Poids</div>
+      <div class="li" id="goal-legend" style="display:none;"><div class="ld" style="background:#dc2626"></div>Objectif</div>
+    </div>
+    <div class="chart-wrap"><canvas id="w-chart" height="180"></canvas></div>
+    <div id="chart-empty" class="empty" style="display:none;">Ajoute au moins 2 mesures pour voir la courbe</div>
+  </div>
+  <div class="card">
+    <div class="ct">Historique</div>
+    <div id="w-history"></div>
+  </div>
+</div>
+
+<!-- TENSION -->
+<div id="panel-bp" class="panel">
+  <div class="two">
+    <div class="card">
+      <div class="ct">Tension</div>
+      <div class="bp-num" id="bp-val">--/--</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">mmHg</div>
+      <div id="bp-badge" style="margin-top:8px;"></div>
+    </div>
+    <div class="card">
+      <div class="ct">Pouls</div>
+      <div class="bp-num" id="hr-val">--</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">bpm</div>
+      <div id="hr-badge" style="margin-top:8px;"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">Nouvelle mesure</div>
+    <label>Systolique (mmHg)</label>
+    <input type="number" id="bp-sys" placeholder="ex: 125">
+    <label>Diastolique (mmHg)</label>
+    <input type="number" id="bp-dia" placeholder="ex: 80">
+    <label>Rythme cardiaque (bpm)</label>
+    <input type="number" id="hr-in" placeholder="ex: 68">
+    <div style="margin-top:18px;">
+      <button class="btn ba" onclick="logBP()" style="width:100%;">Enregistrer</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">Historique</div>
+    <div id="bp-history"></div>
+  </div>
+</div>
+
+<!-- REGLAGES -->
+<div id="panel-settings" class="panel">
+
+  <div class="card">
+    <div class="ct">⏰ Alarmes médicament</div>
+    <div id="alarm-display"></div>
+    <div style="margin-top:14px;">
+      <button class="btn bw" onclick="openClock()" style="width:100%;">Ouvrir l'appli Horloge</button>
+    </div>
+    <p style="font-size:0.78rem;color:var(--muted);margin-top:10px;text-align:center;">Les alarmes sont gérées directement dans l'appli Horloge de ton téléphone.</p>
+  </div>
+
+  <div class="card">
+    <div class="ct">Objectif de poids</div>
+    <label>Objectif (kg)</label>
+    <div class="row">
+      <input type="number" id="goal-in" placeholder="ex: 78" step="0.1">
+      <button class="btn ba" onclick="saveGoal()">OK</button>
+    </div>
+    <div style="margin-top:10px;font-size:0.85rem;color:var(--muted);">
+      Actuel : <span id="goal-lbl" style="color:var(--accent);font-weight:700;">--</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Effacer les données</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button class="btn bd" onclick="clearSection('weight')">Effacer historique poids</button>
+      <button class="btn bd" onclick="clearSection('bp')">Effacer historique tension</button>
+      <button class="btn bd" onclick="clearAll()">Tout effacer</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Références tension</div>
+    <div style="font-size:0.9rem;color:var(--muted);line-height:2.2;">
+      <span style="color:var(--ok);">●</span> Normale : &lt; 130/80 mmHg<br>
+      <span style="color:var(--warn);">●</span> Limite haute : 130–139 / 80–89<br>
+      <span style="color:var(--danger);">●</span> Élevée : ≥ 140/90 mmHg<br>
+      <span style="color:var(--ok);">●</span> Pouls normal : 60–100 bpm
+    </div>
+  </div>
+</div>
+
+<div class="bnav">
+  <div class="ni active" onclick="switchTab('med',this)"><div class="ni-ico">💊</div><div>Médocs</div></div>
+  <div class="ni" onclick="switchTab('weight',this)"><div class="ni-ico">⚖️</div><div>Poids</div></div>
+  <div class="ni" onclick="switchTab('bp',this)"><div class="ni-ico">❤️</div><div>Tension</div></div>
+  <div class="ni" onclick="switchTab('settings',this)"><div class="ni-ico">⚙️</div><div>Réglages</div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let S={meds:[],weights:[],bps:[],weightGoal:null};
+function load(){try{const s=localStorage.getItem('vitalcheck_v1');if(s)S={...S,...JSON.parse(s)};}catch(e){}}
+function save(){localStorage.setItem('vitalcheck_v1',JSON.stringify(S));}
+function today(){return new Date().toISOString().slice(0,10);}
+function isWeekend(){const d=new Date().getDay();return d===0||d===6;}
+function fmtD(d){const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+function fmtS(d){const[,m,day]=d.split('-');return`${day}/${m}`;}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+function switchTab(n,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
+  document.getElementById('panel-'+n).classList.add('active');
+  el.classList.add('active');
+  renderAll();
+}
+
+function openClock(){
+  window.location.href='intent://alarm#Intent;action=android.intent.action.SET_ALARM;end';
+  setTimeout(()=>{window.location.href='intent://#Intent;action=com.google.android.deskclock;package=com.google.android.deskclock;end';},300);
+}
+
+// MEDS
+function addMed(){
+  const name=document.getElementById('nm-name').value.trim();
+  const stock=parseInt(document.getElementById('nm-stock').value);
+  const alert=parseInt(document.getElementById('nm-alert').value);
+  const timeWeek=document.getElementById('nm-time-week').value||'08:45';
+  const timeWknd=document.getElementById('nm-time-wknd').value||'11:00';
+  if(!name||isNaN(stock)||isNaN(alert)){toast('Remplis tous les champs');return;}
+  S.meds.push({id:Date.now(),name,stock,alert,timeWeek,timeWknd,takenDates:[]});
+  save();
+  ['nm-name','nm-stock','nm-alert'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('nm-time-week').value='08:45';
+  document.getElementById('nm-time-wknd').value='11:00';
+  toast('Médicament ajouté ✓');renderMeds();renderAlarms();
+}
+function toggleTaken(id){
+  const m=S.meds.find(x=>x.id===id);if(!m)return;
+  const t=today(),idx=m.takenDates.indexOf(t);
+  if(idx===-1){m.takenDates.push(t);m.stock=Math.max(0,m.stock-1);toast('Pris ✓');}
+  else{m.takenDates.splice(idx,1);m.stock+=1;toast('Marqué non pris');}
+  save();renderMeds();
+}
+function removeMed(id){
+  if(!confirm('Supprimer ce médicament ?'))return;
+  S.meds=S.meds.filter(m=>m.id!==id);
+  save();renderMeds();renderAlarms();
+}
+
+function renderMeds(){
+  const t=today();
+  const we=isWeekend();
+  const list=document.getElementById('med-list');
+  const sd=document.getElementById('stock-display');
+  if(!S.meds.length){
+    list.innerHTML='<div class="empty">Aucun médicament ajouté</div>';
+    sd.innerHTML='';return;
+  }
+  list.innerHTML=S.meds.map(m=>{
+    const tk=m.takenDates.includes(t);
+    const heure=we?(m.timeWknd||'11:00'):(m.timeWeek||'08:45');
+    const jourLabel=we?'week-end':'semaine';
+    return`<div class="med-row ${tk?'taken':''}">
+      <div class="med-ico">💊</div>
+      <div>
+        <div class="med-name">${m.name}</div>
+        <div class="med-sub">${tk?"Pris aujourd'hui ✓":"À prendre ce matin"}</div>
+        <div class="med-time">🕐 ${heure} (${jourLabel})</div>
+      </div>
+      <button class="chk ${tk?'done':''}" onclick="toggleTaken(${m.id})">${tk?'✓':'○'}</button>
+    </div>`;
+  }).join('');
+  sd.innerHTML=S.meds.map(m=>{
+    const mx=Math.max(m.stock,m.alert*4);
+    const pct=Math.min(100,(m.stock/mx)*100);
+    const low=m.stock<=m.alert,near=m.stock<=m.alert*2;
+    const col=low?'var(--danger)':near?'var(--warn)':'var(--ok)';
+    return`<div style="margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div>
+          <span style="font-size:1rem;font-weight:600;">${m.name}</span>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">Sem. ${m.timeWeek||'--'} · W-E ${m.timeWknd||'--'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.1rem;font-weight:700;color:${col};">${m.stock} cp</span>
+          <button class="btn bo" style="font-size:0.85rem;padding:6px 12px;" onclick="removeMed(${m.id})">✕</button>
+        </div>
+      </div>
+      <div class="sbar-bg"><div class="sbar-fill" style="width:${pct}%;background:${col};"></div></div>
+      ${low?`<div style="font-size:0.85rem;color:var(--danger);margin-top:4px;font-weight:600;">⚠️ Commander maintenant — ${m.stock} comprimé(s) restant(s)</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function renderAlarms(){
+  const div=document.getElementById('alarm-display');
+  if(!S.meds.length){
+    div.innerHTML='<div class="empty" style="padding:10px 0;">Aucun médicament enregistré</div>';
+    return;
+  }
+  div.innerHTML=S.meds.map(m=>`
+    <div class="alarm-info">
+      <p>💊 ${m.name}</p>
+      <span>Semaine : <strong>${m.timeWeek||'--'}</strong> &nbsp;·&nbsp; Week-end : <strong>${m.timeWknd||'--'}</strong></span>
+    </div>
+  `).join('');
+}
+
+// POIDS
+function logW(){
+  const val=parseFloat(document.getElementById('w-input').value);
+  if(isNaN(val)||val<30||val>300){toast('Valeur invalide');return;}
+  S.weights.unshift({date:today(),val});
+  if(S.weights.length>120)S.weights=S.weights.slice(0,120);
+  save();document.getElementById('w-input').value='';
+  toast('Poids enregistré ✓');renderW();
+}
+function saveGoal(){
+  const g=parseFloat(document.getElementById('goal-in').value);
+  if(isNaN(g)||g<30||g>300){toast('Objectif invalide');return;}
+  S.weightGoal=g;save();toast('Objectif enregistré ✓');renderW();
+}
+function renderW(){
+  const data=[...S.weights].reverse();
+  const latest=S.weights[0];
+  const goal=S.weightGoal;
+  const chip=document.getElementById('goal-chip');
+  const leg=document.getElementById('goal-legend');
+  if(goal){chip.style.display='';chip.textContent='Objectif '+goal+' kg';leg.style.display='';}
+  else{chip.style.display='none';leg.style.display='none';}
+  document.getElementById('goal-lbl').textContent=goal?goal+' kg':'--';
+  if(!latest){
+    document.getElementById('w-val').innerHTML='--<span class="unit">kg</span>';
+    document.getElementById('w-badge').innerHTML='';
+    document.getElementById('w-trend').innerHTML='';
+    document.getElementById('w-prog').style.width='0%';
+    document.getElementById('w-prog-lbl').textContent='';
+    document.getElementById('w-history').innerHTML='<div class="empty">Aucune mesure</div>';
+    drawChart([],goal);return;
+  }
+  document.getElementById('w-val').innerHTML=latest.val+'<span class="unit">kg</span>';
+  let bh='';
+  if(goal){
+    const diff=(latest.val-goal).toFixed(1);
+    if(diff<=0)bh=`<span class="badge ok">🎯 Objectif atteint !</span>`;
+    else if(diff<=2)bh=`<span class="badge warn">${diff} kg de l'objectif</span>`;
+    else bh=`<span class="badge danger">${diff} kg de l'objectif</span>`;
+  }
+  document.getElementById('w-badge').innerHTML=bh;
+  if(goal&&S.weights.length>=1){
+    const sw=S.weights[S.weights.length-1].val;
+    const ttl=sw-goal,lost=sw-latest.val;
+    const pct=ttl>0?Math.max(0,Math.min(100,(lost/ttl)*100)):(latest.val<=goal?100:0);
+    document.getElementById('w-prog').style.width=pct.toFixed(0)+'%';
+    document.getElementById('w-prog-lbl').textContent=ttl>0?`${Math.max(0,lost).toFixed(1)} kg perdus sur ${ttl.toFixed(1)} kg à perdre`:(latest.val<=goal?'Objectif atteint':'');
+  }else{document.getElementById('w-prog').style.width='0%';document.getElementById('w-prog-lbl').textContent='';}
+  let th='';
+  if(S.weights.length>=2){
+    const d=(latest.val-S.weights[1].val).toFixed(1);
+    if(d<0)th=`<div class="trend down">↓ ${Math.abs(d)} kg depuis la dernière pesée</div>`;
+    else if(d>0)th=`<div class="trend up">↑ ${d} kg depuis la dernière pesée</div>`;
+    else th=`<div class="trend neutral">Stable</div>`;
+  }
+  document.getElementById('w-trend').innerHTML=th;
+  document.getElementById('w-history').innerHTML=S.weights.slice(0,15).map(w=>{
+    const diff=goal?(w.val-goal).toFixed(1):null;
+    const dc=!diff?'':(diff<=0?'color:var(--ok)':'color:var(--warn)');
+    return`<div class="hi">
+      <div><div class="hv">${w.val} kg</div><div class="hd">${fmtD(w.date)}</div></div>
+      ${diff!==null?`<div style="font-size:1rem;font-weight:700;${dc}">${diff>0?'+':''}${diff} kg</div>`:''}
+    </div>`;
+  }).join('')||'<div class="empty">Aucune mesure</div>';
+  drawChart(data,goal);
+}
+
+function drawChart(data,goal){
+  const canvas=document.getElementById('w-chart');
+  const empty=document.getElementById('chart-empty');
+  if(data.length<2){canvas.style.display='none';empty.style.display='';return;}
+  canvas.style.display='';empty.style.display='none';
+  const dpr=window.devicePixelRatio||1;
+  const PAD={top:20,right:16,bottom:44,left:52};
+  const dispW=Math.max(data.length*60,canvas.parentElement.clientWidth||320);
+  const dispH=180;
+  canvas.style.width=dispW+'px';canvas.style.height=dispH+'px';
+  canvas.width=dispW*dpr;canvas.height=dispH*dpr;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);ctx.clearRect(0,0,dispW,dispH);
+  const vals=data.map(d=>d.val);
+  let mn=Math.min(...vals),mx=Math.max(...vals);
+  if(goal!==null){mn=Math.min(mn,goal);mx=Math.max(mx,goal);}
+  const pad=Math.max((mx-mn)*0.2,0.5);mn-=pad;mx+=pad;
+  const cW=dispW-PAD.left-PAD.right,cH=dispH-PAD.top-PAD.bottom;
+  function xOf(i){return PAD.left+(i/(Math.max(data.length-1,1)))*cW;}
+  function yOf(v){return PAD.top+(1-(v-mn)/(mx-mn))*cH;}
+  ctx.strokeStyle='#e0e7ef';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const v=mn+(mx-mn)*(i/4),y=yOf(v);
+    ctx.beginPath();ctx.moveTo(PAD.left,y);ctx.lineTo(dispW-PAD.right,y);ctx.stroke();
+    ctx.fillStyle='#6b7280';ctx.font='600 11px Inter,sans-serif';ctx.textAlign='right';
+    ctx.fillText(v.toFixed(1),PAD.left-8,y+4);
+  }
+  if(goal!==null){
+    const gy=yOf(goal);
+    ctx.strokeStyle='#dc2626';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(PAD.left,gy);ctx.lineTo(dispW-PAD.right,gy);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#dc2626';ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='left';
+    ctx.fillText(goal+' kg',PAD.left+6,gy-5);
+  }
+  ctx.beginPath();ctx.moveTo(xOf(0),yOf(data[0].val));
+  for(let i=1;i<data.length;i++)ctx.lineTo(xOf(i),yOf(data[i].val));
+  ctx.lineTo(xOf(data.length-1),PAD.top+cH);
+  ctx.lineTo(xOf(0),PAD.top+cH);ctx.closePath();
+  ctx.fillStyle='rgba(29,78,216,0.08)';ctx.fill();
+  ctx.strokeStyle='#1d4ed8';ctx.lineWidth=3;ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(xOf(0),yOf(data[0].val));
+  for(let i=1;i<data.length;i++)ctx.lineTo(xOf(i),yOf(data[i].val));
+  ctx.stroke();
+  const step=data.length<=7?1:data.length<=14?2:Math.ceil(data.length/7);
+  data.forEach((d,i)=>{
+    const x=xOf(i),y=yOf(d.val);
+    ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.strokeStyle='#1d4ed8';ctx.lineWidth=2.5;ctx.stroke();
+    if(i%step===0||i===data.length-1){
+      ctx.fillStyle='#6b7280';ctx.font='600 10px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(fmtS(d.date),x,dispH-8);
+    }
+  });
+}
+
+// TENSION
+function bpSt(s,d){
+  if(s>=140||d>=90)return{label:'Élevée',cls:'danger'};
+  if(s>=130||d>=80)return{label:'Limite haute',cls:'warn'};
+  return{label:'Normale',cls:'ok'};
+}
+function hrSt(h){
+  if(h<50||h>100)return{label:h<50?'Bas':'Élevé',cls:'warn'};
+  return{label:'Normal',cls:'ok'};
+}
+function logBP(){
+  const sys=parseInt(document.getElementById('bp-sys').value);
+  const dia=parseInt(document.getElementById('bp-dia').value);
+  const hr=parseInt(document.getElementById('hr-in').value);
+  if(isNaN(sys)||isNaN(dia)||isNaN(hr)){toast('Remplis tous les champs');return;}
+  S.bps.unshift({date:today(),sys,dia,hr});
+  if(S.bps.length>120)S.bps=S.bps.slice(0,120);
+  save();['bp-sys','bp-dia','hr-in'].forEach(id=>document.getElementById(id).value='');
+  toast('Mesure enregistrée ✓');renderBP();
+}
+function renderBP(){
+  const latest=S.bps[0];
+  if(!latest){
+    document.getElementById('bp-val').textContent='--/--';
+    document.getElementById('hr-val').textContent='--';
+    document.getElementById('bp-badge').innerHTML='';
+    document.getElementById('hr-badge').innerHTML='';
+    document.getElementById('bp-history').innerHTML='<div class="empty">Aucune mesure</div>';
+    return;
+  }
+  document.getElementById('bp-val').textContent=`${latest.sys}/${latest.dia}`;
+  document.getElementById('hr-val').textContent=latest.hr;
+  const bs=bpSt(latest.sys,latest.dia),hs=hrSt(latest.hr);
+  document.getElementById('bp-badge').innerHTML=`<span class="badge ${bs.cls}">${bs.label}</span>`;
+  document.getElementById('hr-badge').innerHTML=`<span class="badge ${hs.cls}">${hs.label}</span>`;
+  document.getElementById('bp-history').innerHTML=S.bps.slice(0,15).map(b=>{
+    const s=bpSt(b.sys,b.dia);
+    return`<div class="hi">
+      <div><div class="hv">${b.sys}/${b.dia} <span style="font-size:0.85rem;color:var(--muted);font-weight:400;">mmHg</span></div><div class="hd">${fmtD(b.date)} · ${b.hr} bpm</div></div>
+      <span class="badge ${s.cls}">${s.label}</span>
+    </div>`;
+  }).join('');
+}
+
+// CLEAR
+function clearSection(w){
+  if(!confirm('Effacer cet historique ?'))return;
+  if(w==='weight')S.weights=[];
+  if(w==='bp')S.bps=[];
+  save();renderAll();toast('Effacé');
+}
+function clearAll(){
+  if(!confirm('Tout effacer ? Action irréversible.'))return;
+  S={meds:[],weights:[],bps:[],weightGoal:null};
+  save();renderAll();toast('Données effacées');
+}
+
+function renderAll(){renderMeds();renderW();renderBP();renderAlarms();}
+
+function setDate(){
+  const d=new Date();
+  const days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  document.getElementById('date-label').textContent=`${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+load();setDate();renderAll();
+</script>
+</body>
+</html>
