@@ -37,11 +37,12 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
 .row input{margin-top:0;}
 .two-input{display:flex;gap:10px;}
 .two-input>div{flex:1;}
-.btn{padding:14px 20px;border-radius:14px;border:none;font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.btn{padding:14px 20px;border-radius:14px;border:none;font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;text-align:center;}
 .ba{background:var(--accent);color:#fff;}.ba:active{transform:scale(.96);}
 .bo{background:transparent;border:2px solid var(--border);color:var(--muted);}
 .bd{background:var(--danger-bg);color:var(--danger);border:1.5px solid var(--danger-border);}
 .bw{background:#f59e0b;color:#fff;border:none;}
+.bg{background:var(--ok-bg);color:var(--ok);border:1.5px solid var(--ok-border);}
 .med-row{display:flex;align-items:center;gap:14px;padding:18px;border-radius:16px;background:var(--bg);border:2px solid var(--border);margin-bottom:12px;transition:all .2s;}
 .med-row.taken{border-color:var(--ok-border);background:var(--ok-bg);}
 .med-ico{font-size:2rem;flex-shrink:0;}
@@ -78,9 +79,11 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
 .ni-ico{font-size:1.6rem;}
 .empty{color:var(--muted);font-size:0.9rem;text-align:center;padding:24px 0;}
 .bp-num{font-size:2.2rem;font-weight:800;line-height:1.1;}
-.alarm-info{background:var(--accent-light);border:1.5px solid #bfdbfe;border-radius:14px;padding:14px 16px;margin-bottom:12px;}
+.alarm-info{background:var(--accent-light);border:1.5px solid #bfdbfe;border-radius:14px;padding:14px 16px;margin-bottom:10px;}
 .alarm-info p{font-size:0.85rem;color:var(--accent);font-weight:600;margin-bottom:4px;}
 .alarm-info span{font-size:0.8rem;color:var(--muted);}
+.btn-row{display:flex;gap:10px;}
+.btn-row .btn{flex:1;}
 </style>
 </head>
 <body>
@@ -105,14 +108,8 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
     <label>Seuil d'alerte (comprimés restants)</label>
     <input type="number" id="nm-alert" placeholder="ex: 7">
     <div class="two-input">
-      <div>
-        <label>Heure semaine</label>
-        <input type="time" id="nm-time-week" value="08:45">
-      </div>
-      <div>
-        <label>Heure week-end</label>
-        <input type="time" id="nm-time-wknd" value="11:00">
-      </div>
+      <div><label>Heure semaine</label><input type="time" id="nm-time-week" value="08:45"></div>
+      <div><label>Heure week-end</label><input type="time" id="nm-time-wknd" value="11:00"></div>
     </div>
     <div style="margin-top:18px;">
       <button class="btn ba" onclick="addMed()" style="width:100%;">Ajouter</button>
@@ -215,6 +212,17 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
   </div>
 
   <div class="card">
+    <div class="ct">💾 Sauvegarde des données</div>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px;">Exporte tes données avant de changer de téléphone. Importe-les sur le nouveau.</p>
+    <div class="btn-row">
+      <button class="btn bg" onclick="exportData()">⬆️ Exporter</button>
+      <button class="btn ba" onclick="document.getElementById('import-file').click()">⬇️ Importer</button>
+    </div>
+    <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
+    <div id="import-status" style="font-size:0.82rem;color:var(--ok);margin-top:10px;text-align:center;"></div>
+  </div>
+
+  <div class="card">
     <div class="ct">Effacer les données</div>
     <div style="display:flex;flex-direction:column;gap:10px;">
       <button class="btn bd" onclick="clearSection('weight')">Effacer historique poids</button>
@@ -251,7 +259,7 @@ function today(){return new Date().toISOString().slice(0,10);}
 function isWeekend(){const d=new Date().getDay();return d===0||d===6;}
 function fmtD(d){const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
 function fmtS(d){const[,m,day]=d.split('-');return`${day}/${m}`;}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
 
 function switchTab(n,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -264,6 +272,41 @@ function switchTab(n,el){
 function openClock(){
   window.location.href='intent://alarm#Intent;action=android.intent.action.SET_ALARM;end';
   setTimeout(()=>{window.location.href='intent://#Intent;action=com.google.android.deskclock;package=com.google.android.deskclock;end';},300);
+}
+
+// EXPORT
+function exportData(){
+  const json=JSON.stringify(S,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const d=new Date();
+  const fname=`vitalcheck_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
+  a.href=url;a.download=fname;a.click();
+  URL.revokeObjectURL(url);
+  toast('Données exportées ✓');
+}
+
+// IMPORT
+function importData(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.meds||!data.weights||!data.bps){
+        toast('Fichier invalide');return;
+      }
+      if(!confirm('Importer ces données ? Tes données actuelles seront remplacées.'))return;
+      S={meds:data.meds||[],weights:data.weights||[],bps:data.bps||[],weightGoal:data.weightGoal||null};
+      save();renderAll();
+      document.getElementById('import-status').textContent='✓ Données importées avec succès';
+      toast('Import réussi ✓');
+    }catch(err){toast('Erreur lors de l\'import');}
+  };
+  reader.readAsText(file);
+  event.target.value='';
 }
 
 // MEDS
@@ -342,15 +385,13 @@ function renderMeds(){
 function renderAlarms(){
   const div=document.getElementById('alarm-display');
   if(!S.meds.length){
-    div.innerHTML='<div class="empty" style="padding:10px 0;">Aucun médicament enregistré</div>';
-    return;
+    div.innerHTML='<div class="empty" style="padding:10px 0;">Aucun médicament enregistré</div>';return;
   }
   div.innerHTML=S.meds.map(m=>`
     <div class="alarm-info">
       <p>💊 ${m.name}</p>
       <span>Semaine : <strong>${m.timeWeek||'--'}</strong> &nbsp;·&nbsp; Week-end : <strong>${m.timeWknd||'--'}</strong></span>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 // POIDS
