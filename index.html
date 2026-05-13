@@ -485,9 +485,9 @@ function drawChart(data,goal){
   if(data.length<2){canvas.style.display='none';empty.style.display='';return;}
   canvas.style.display='';empty.style.display='none';
   const dpr=window.devicePixelRatio||1;
-  const PAD={top:20,right:16,bottom:44,left:52};
+  const PAD={top:30,right:16,bottom:44,left:52};
   const dispW=Math.max(data.length*60,canvas.parentElement.clientWidth||320);
-  const dispH=180;
+  const dispH=210;
   canvas.style.width=dispW+'px';canvas.style.height=dispH+'px';
   canvas.width=dispW*dpr;canvas.height=dispH*dpr;
   const ctx=canvas.getContext('2d');
@@ -526,11 +526,16 @@ function drawChart(data,goal){
   const step=data.length<=7?1:data.length<=14?2:Math.ceil(data.length/7);
   data.forEach((d,i)=>{
     const x=xOf(i),y=yOf(d.val);
+    // Point
     ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);
     ctx.fillStyle='#fff';ctx.fill();
     ctx.strokeStyle='#1d4ed8';ctx.lineWidth=2.5;ctx.stroke();
+    // Valeur kg au-dessus du point
     if(i%step===0||i===data.length-1){
-      ctx.fillStyle='#6b7280';ctx.font='600 10px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillStyle='#1d4ed8';ctx.font='700 11px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(d.val.toFixed(1),x,y-10);
+      // Date en bas
+      ctx.fillStyle='#6b7280';ctx.font='600 10px Inter,sans-serif';
       ctx.fillText(fmtS(d.date),x,dispH-8);
     }
   });
