@@ -139,7 +139,9 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
     <div class="pb-bg"><div class="pb-fill" id="w-prog" style="width:0%"></div></div>
     <div id="w-prog-lbl" style="font-size:0.8rem;color:var(--muted);margin-top:4px;"></div>
     <div class="sep"></div>
-    <label>Peser aujourd'hui (kg)</label>
+    <label>Date de la mesure</label>
+    <input type="date" id="w-date">
+    <label>Poids (kg)</label>
     <div class="row">
       <input type="number" id="w-input" placeholder="ex: 82.4" step="0.1">
       <button class="btn ba" onclick="logW()">OK</button>
@@ -178,6 +180,8 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
   </div>
   <div class="card">
     <div class="ct">Nouvelle mesure</div>
+    <label>Date de la mesure</label>
+    <input type="date" id="bp-date">
     <label>Systolique (mmHg)</label>
     <input type="number" id="bp-sys" placeholder="ex: 125">
     <label>Diastolique (mmHg)</label>
@@ -404,10 +408,17 @@ function renderAlarms(){
 // POIDS
 function logW(){
   const val=parseFloat(document.getElementById('w-input').value);
+  const dateVal=document.getElementById('w-date').value;
   if(isNaN(val)||val<30||val>300){toast('Valeur invalide');return;}
-  S.weights.unshift({date:today(),val});
+  if(!dateVal){toast('Indique une date');return;}
+  // Remplace si même date existe déjà
+  const idx=S.weights.findIndex(x=>x.date===dateVal);
+  if(idx!==-1) S.weights.splice(idx,1);
+  S.weights.push({date:dateVal,val});
+  S.weights.sort((a,b)=>b.date.localeCompare(a.date));
   if(S.weights.length>120)S.weights=S.weights.slice(0,120);
   save();document.getElementById('w-input').value='';
+  document.getElementById('w-date').value=today();
   toast('Poids enregistré ✓');renderW();
 }
 function saveGoal(){
@@ -539,10 +550,16 @@ function logBP(){
   const sys=parseInt(document.getElementById('bp-sys').value);
   const dia=parseInt(document.getElementById('bp-dia').value);
   const hr=parseInt(document.getElementById('hr-in').value);
+  const dateVal=document.getElementById('bp-date').value;
   if(isNaN(sys)||isNaN(dia)||isNaN(hr)){toast('Remplis tous les champs');return;}
-  S.bps.unshift({date:today(),sys,dia,hr});
+  if(!dateVal){toast('Indique une date');return;}
+  const idx=S.bps.findIndex(x=>x.date===dateVal);
+  if(idx!==-1) S.bps.splice(idx,1);
+  S.bps.push({date:dateVal,sys,dia,hr});
+  S.bps.sort((a,b)=>b.date.localeCompare(a.date));
   if(S.bps.length>120)S.bps=S.bps.slice(0,120);
   save();['bp-sys','bp-dia','hr-in'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('bp-date').value=today();
   toast('Mesure enregistrée ✓');renderBP();
 }
 function renderBP(){
@@ -592,6 +609,9 @@ function setDate(){
 }
 
 load();setDate();renderAll();
+// Init champs date
+document.getElementById('w-date').value=today();
+document.getElementById('bp-date').value=today();
 
 // Génération icône PWA (💊 sur fond bleu)
 function generateIcon(){
