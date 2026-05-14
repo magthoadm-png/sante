@@ -10,87 +10,108 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="VitalCheck">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-:root {
-  --bg:#f0f4f8; --card:#ffffff; --border:#dde3ed; --accent:#1d4ed8;
-  --accent-light:#eff4ff; --text:#111827; --muted:#6b7280;
-  --ok:#15803d; --ok-bg:#f0fdf4; --ok-border:#bbf7d0;
-  --warn:#b45309; --warn-bg:#fffbeb; --warn-border:#fde68a;
-  --danger:#b91c1c; --danger-bg:#fef2f2; --danger-border:#fecaca;
+:root{
+  --bg:#f0f4f8;--card:#fff;--border:#dde3ed;--accent:#1d4ed8;
+  --accent-light:#eff4ff;--text:#111827;--muted:#6b7280;
+  --ok:#15803d;--ok-bg:#f0fdf4;--ok-border:#bbf7d0;
+  --warn:#b45309;--warn-bg:#fffbeb;--warn-border:#fde68a;
+  --danger:#b91c1c;--danger-bg:#fef2f2;--danger-border:#fecaca;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{font-size:18px;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:24px 16px 100px;line-height:1.4;}
-h1{font-size:2rem;font-weight:800;color:var(--accent);margin-bottom:4px;}
-.sub{color:var(--muted);font-size:0.85rem;margin-bottom:24px;}
+html{font-size:15px;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 12px 90px;line-height:1.4;}
+h1{font-size:1.5rem;font-weight:800;color:var(--accent);margin-bottom:2px;}
+.sub{color:var(--muted);font-size:0.75rem;margin-bottom:16px;}
 .panel{display:none;animation:fi 0.2s ease;}
 .panel.active{display:block;}
-@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
-.ct{font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px;margin-bottom:16px;}
-.big{font-size:3.8rem;font-weight:800;line-height:1;color:var(--text);}
-.unit{font-size:1.1rem;color:var(--muted);margin-left:4px;font-weight:500;}
-.badge{display:inline-flex;align-items:center;padding:6px 14px;border-radius:24px;font-size:0.82rem;font-weight:600;margin-top:8px;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.ct{font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;}
+.big{font-size:2.6rem;font-weight:800;line-height:1;color:var(--text);}
+.unit{font-size:0.9rem;color:var(--muted);margin-left:3px;font-weight:500;}
+.bp-num{font-size:1.8rem;font-weight:800;line-height:1.1;}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:0.72rem;font-weight:600;margin-top:5px;}
 .badge.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-border);}
 .badge.warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border);}
 .badge.danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border);}
-label{font-size:0.85rem;font-weight:600;color:var(--muted);display:block;margin:16px 0 6px;}
-input[type=number],input[type=text],input[type=time]{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:14px;color:var(--text);font-family:'Inter',sans-serif;font-size:1.2rem;font-weight:500;padding:14px 16px;outline:none;transition:border-color .2s;}
-input:focus{border-color:var(--accent);background:#fff;}
-input::placeholder{color:#9ca3af;font-size:1rem;}
-.row{display:flex;gap:10px;align-items:flex-end;margin-top:12px;}
+label{font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin:10px 0 4px;}
+input[type=number],input[type=text],input[type=time],input[type=date],textarea{
+  width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:1rem;font-weight:500;
+  padding:10px 12px;outline:none;transition:border-color .2s;
+}
+textarea{resize:none;min-height:70px;font-size:0.9rem;}
+input:focus,textarea:focus{border-color:var(--accent);background:#fff;}
+input::placeholder,textarea::placeholder{color:#9ca3af;font-size:0.85rem;}
+.row{display:flex;gap:8px;align-items:flex-end;margin-top:8px;}
 .row input{margin-top:0;}
-.two-input{display:flex;gap:10px;}
+.two-input{display:flex;gap:8px;}
 .two-input>div{flex:1;}
-.btn{padding:14px 20px;border-radius:14px;border:none;font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;text-align:center;}
+.btn{padding:10px 14px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;text-align:center;display:inline-block;}
 .ba{background:var(--accent);color:#fff;}.ba:active{transform:scale(.96);}
-.bo{background:transparent;border:2px solid var(--border);color:var(--muted);}
-.bd{background:var(--danger-bg);color:var(--danger);border:1.5px solid var(--danger-border);}
+.bo{background:transparent;border:1.5px solid var(--border);color:var(--muted);}
+.bd{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border);}
 .bw{background:#f59e0b;color:#fff;border:none;}
-.bg{background:var(--ok-bg);color:var(--ok);border:1.5px solid var(--ok-border);}
-.med-row{display:flex;align-items:center;gap:14px;padding:18px;border-radius:16px;background:var(--bg);border:2px solid var(--border);margin-bottom:12px;transition:all .2s;}
+.bg{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-border);}
+.btn-row{display:flex;gap:8px;}
+.btn-row .btn{flex:1;padding:10px 8px;font-size:0.8rem;}
+.med-row{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--bg);border:1.5px solid var(--border);margin-bottom:8px;transition:all .2s;}
 .med-row.taken{border-color:var(--ok-border);background:var(--ok-bg);}
-.med-ico{font-size:2rem;flex-shrink:0;}
-.med-name{font-size:1.15rem;font-weight:700;}
-.med-sub{font-size:0.82rem;color:var(--muted);margin-top:3px;}
-.med-time{font-size:0.8rem;color:var(--accent);font-weight:600;margin-top:4px;}
-.chk{margin-left:auto;width:50px;height:50px;border-radius:50%;border:2.5px solid var(--border);background:#fff;color:var(--muted);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.med-ico{font-size:1.6rem;flex-shrink:0;}
+.med-name{font-size:0.95rem;font-weight:700;}
+.med-sub{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.med-time{font-size:0.7rem;color:var(--accent);font-weight:600;margin-top:3px;}
+.chk{margin-left:auto;width:38px;height:38px;border-radius:50%;border:2px solid var(--border);background:#fff;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
 .chk.done{background:var(--ok);border-color:var(--ok);color:#fff;}
-.sbar-bg{height:8px;background:var(--bg);border-radius:4px;margin:10px 0 6px;overflow:hidden;border:1px solid var(--border);}
-.sbar-fill{height:100%;border-radius:4px;transition:width .5s ease;}
-.sep{height:1.5px;background:var(--border);margin:20px 0;}
-.two{display:flex;gap:12px;margin-bottom:16px;}
+.sbar-bg{height:6px;background:var(--bg);border-radius:3px;margin:7px 0 4px;overflow:hidden;border:1px solid var(--border);}
+.sbar-fill{height:100%;border-radius:3px;transition:width .5s ease;}
+.sep{height:1px;background:var(--border);margin:12px 0;}
+.two{display:flex;gap:8px;margin-bottom:10px;}
 .two .card{flex:1;margin-bottom:0;}
-.hi{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1.5px solid var(--border);}
+.hi{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);}
 .hi:last-child{border-bottom:none;}
-.hv{font-size:1.15rem;font-weight:700;}
-.hd{color:var(--muted);font-size:0.8rem;margin-top:3px;}
-.trend{font-size:0.85rem;margin-top:6px;font-weight:500;}
+.hv{font-size:0.95rem;font-weight:700;}
+.hd{color:var(--muted);font-size:0.7rem;margin-top:2px;}
+.trend{font-size:0.75rem;margin-top:4px;font-weight:500;}
 .trend.up{color:var(--danger);}.trend.down{color:var(--ok);}.trend.neutral{color:var(--muted);}
-.wh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;}
-.goal-chip{background:var(--accent-light);color:var(--accent);font-size:0.82rem;padding:6px 14px;border-radius:24px;font-weight:600;margin-top:8px;border:1px solid #bfdbfe;}
-.pb-bg{height:10px;background:var(--bg);border-radius:5px;overflow:hidden;border:1.5px solid var(--border);margin:12px 0 6px;}
-.pb-fill{height:100%;border-radius:5px;background:var(--accent);transition:width .6s ease;}
-.legend{display:flex;gap:16px;margin:6px 0 4px;}
-.li{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:var(--muted);font-weight:500;}
-.ld{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.chart-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:10px;}
+.wh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
+.goal-chip{background:var(--accent-light);color:var(--accent);font-size:0.72rem;padding:4px 10px;border-radius:20px;font-weight:600;margin-top:4px;border:1px solid #bfdbfe;}
+.pb-bg{height:7px;background:var(--bg);border-radius:4px;overflow:hidden;border:1px solid var(--border);margin:8px 0 3px;}
+.pb-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .6s ease;}
+.legend{display:flex;gap:12px;margin:4px 0 2px;}
+.li{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted);font-weight:500;}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.chart-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-top:6px;}
 .chart-wrap::-webkit-scrollbar{display:none;}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(16px);background:#111827;color:#fff;padding:14px 28px;border-radius:24px;font-size:1rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
+.alarm-info{background:var(--accent-light);border:1px solid #bfdbfe;border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.alarm-info p{font-size:0.8rem;color:var(--accent);font-weight:600;margin-bottom:2px;}
+.alarm-info span{font-size:0.72rem;color:var(--muted);}
+.symptom-card{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;}
+.symptom-title{font-size:0.95rem;font-weight:700;color:var(--text);}
+.symptom-meta{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.snote{padding:8px 0;border-bottom:1px solid var(--border);}
+.snote:last-child{border-bottom:none;}
+.snote-date{font-size:0.7rem;color:var(--muted);font-weight:600;}
+.snote-comment{font-size:0.85rem;margin-top:2px;}
+.pain-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:20px;border-radius:10px;font-size:0.7rem;font-weight:700;margin-left:6px;vertical-align:middle;}
+.pain-low{background:#dcfce7;color:#15803d;}
+.pain-mid{background:#fef9c3;color:#a16207;}
+.pain-high{background:#fee2e2;color:#b91c1c;}
+.pain-row{display:flex;align-items:center;gap:10px;margin-top:4px;}
+.pain-row input[type=range]{flex:1;accent-color:var(--accent);}
+.pain-val{font-size:1rem;font-weight:700;color:var(--accent);min-width:24px;text-align:center;}
+.inline-edit{display:none;gap:8px;align-items:center;margin:6px 0;}
+.inline-edit.open{display:flex;}
+.inline-edit input{flex:1;padding:7px 10px;font-size:0.9rem;border-radius:8px;border:1.5px solid var(--accent);background:#fff;color:var(--text);width:auto;}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:#111827;color:#fff;padding:10px 22px;border-radius:20px;font-size:0.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1.5px solid var(--border);display:flex;justify-content:space-around;padding:10px 0 16px;z-index:100;box-shadow:0 -2px 16px rgba(0,0,0,0.07);}
-.ni{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 18px;border-radius:14px;transition:all .2s;color:var(--muted);font-size:0.72rem;font-weight:600;}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:7px 0 12px;z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,0.06);}
+.ni{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 8px;border-radius:10px;transition:all .2s;color:var(--muted);font-size:0.6rem;font-weight:600;}
 .ni.active{color:var(--accent);}
-.ni-ico{font-size:1.6rem;}
-.empty{color:var(--muted);font-size:0.9rem;text-align:center;padding:24px 0;}
-.bp-num{font-size:2.2rem;font-weight:800;line-height:1.1;}
-.alarm-info{background:var(--accent-light);border:1.5px solid #bfdbfe;border-radius:14px;padding:14px 16px;margin-bottom:10px;}
-.alarm-info p{font-size:0.85rem;color:var(--accent);font-weight:600;margin-bottom:4px;}
-.alarm-info span{font-size:0.8rem;color:var(--muted);}
-.btn-row{display:flex;gap:10px;}
-.btn-row .btn{flex:1;padding:11px 10px;font-size:0.85rem;}
+.ni-ico{font-size:1.35rem;}
+.empty{color:var(--muted);font-size:0.85rem;text-align:center;padding:20px 0;}
 </style>
 </head>
 <body>
@@ -104,10 +125,10 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
     <div class="ct">💊 Aujourd'hui</div>
     <div id="med-list"></div>
     <div class="sep"></div>
-    <div class="ct" style="margin-bottom:12px;">Stock</div>
+    <div class="ct" style="margin-bottom:8px;">Stock</div>
     <div id="stock-display"></div>
     <div class="sep"></div>
-    <div class="ct" style="margin-bottom:12px;">Ajouter un médicament</div>
+    <div class="ct" style="margin-bottom:8px;">Ajouter un médicament</div>
     <label>Nom</label>
     <input type="text" id="nm-name" placeholder="ex: Amlodipine">
     <label>Stock actuel (comprimés)</label>
@@ -118,7 +139,7 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
       <div><label>Heure semaine</label><input type="time" id="nm-time-week" value="08:45"></div>
       <div><label>Heure week-end</label><input type="time" id="nm-time-wknd" value="11:00"></div>
     </div>
-    <div style="margin-top:18px;">
+    <div style="margin-top:12px;">
       <button class="btn ba" onclick="addMed()" style="width:100%;">Ajouter</button>
     </div>
   </div>
@@ -137,10 +158,9 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
     </div>
     <div id="w-badge"></div>
     <div class="pb-bg"><div class="pb-fill" id="w-prog" style="width:0%"></div></div>
-    <div id="w-prog-lbl" style="font-size:0.8rem;color:var(--muted);margin-top:4px;"></div>
+    <div id="w-prog-lbl" style="font-size:0.72rem;color:var(--muted);margin-top:2px;"></div>
     <div class="sep"></div>
-    <label>Date de la mesure</label>
-    <input type="date" id="w-date">
+    <label>Date</label><input type="date" id="w-date">
     <label>Poids (kg)</label>
     <div class="row">
       <input type="number" id="w-input" placeholder="ex: 82.4" step="0.1">
@@ -168,27 +188,23 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
     <div class="card">
       <div class="ct">Tension</div>
       <div class="bp-num" id="bp-val">--/--</div>
-      <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">mmHg</div>
-      <div id="bp-badge" style="margin-top:8px;"></div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;">mmHg</div>
+      <div id="bp-badge" style="margin-top:5px;"></div>
     </div>
     <div class="card">
       <div class="ct">Pouls</div>
       <div class="bp-num" id="hr-val">--</div>
-      <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">bpm</div>
-      <div id="hr-badge" style="margin-top:8px;"></div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;">bpm</div>
+      <div id="hr-badge" style="margin-top:5px;"></div>
     </div>
   </div>
   <div class="card">
     <div class="ct">Nouvelle mesure</div>
-    <label>Date de la mesure</label>
-    <input type="date" id="bp-date">
-    <label>Systolique (mmHg)</label>
-    <input type="number" id="bp-sys" placeholder="ex: 125">
-    <label>Diastolique (mmHg)</label>
-    <input type="number" id="bp-dia" placeholder="ex: 80">
-    <label>Rythme cardiaque (bpm)</label>
-    <input type="number" id="hr-in" placeholder="ex: 68">
-    <div style="margin-top:18px;">
+    <label>Date</label><input type="date" id="bp-date">
+    <label>Systolique (mmHg)</label><input type="number" id="bp-sys" placeholder="ex: 125">
+    <label>Diastolique (mmHg)</label><input type="number" id="bp-dia" placeholder="ex: 80">
+    <label>Rythme cardiaque (bpm)</label><input type="number" id="hr-in" placeholder="ex: 68">
+    <div style="margin-top:12px;">
       <button class="btn ba" onclick="logBP()" style="width:100%;">Enregistrer</button>
     </div>
   </div>
@@ -198,18 +214,29 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
   </div>
 </div>
 
+<!-- MEDECIN -->
+<div id="panel-doc" class="panel">
+  <div class="card">
+    <div class="ct">🩺 Nouveau sujet</div>
+    <label>Nom du sujet</label>
+    <input type="text" id="doc-subject" placeholder="ex: Douleur dans le dos">
+    <div style="margin-top:10px;">
+      <button class="btn ba" onclick="addSubject()" style="width:100%;">Créer le sujet</button>
+    </div>
+  </div>
+  <div id="doc-list"></div>
+</div>
+
 <!-- REGLAGES -->
 <div id="panel-settings" class="panel">
-
   <div class="card">
     <div class="ct">⏰ Alarmes médicament</div>
     <div id="alarm-display"></div>
-    <div style="margin-top:14px;">
+    <div style="margin-top:10px;">
       <button class="btn bw" onclick="openClock()" style="width:100%;">Ouvrir l'appli Horloge</button>
     </div>
-    <p style="font-size:0.78rem;color:var(--muted);margin-top:10px;text-align:center;">Les alarmes sont gérées directement dans l'appli Horloge de ton téléphone.</p>
+    <p style="font-size:0.7rem;color:var(--muted);margin-top:8px;text-align:center;">Les alarmes sont gérées dans l'appli Horloge de ton téléphone.</p>
   </div>
-
   <div class="card">
     <div class="ct">Objectif de poids</div>
     <label>Objectif (kg)</label>
@@ -217,34 +244,32 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
       <input type="number" id="goal-in" placeholder="ex: 78" step="0.1">
       <button class="btn ba" onclick="saveGoal()">OK</button>
     </div>
-    <div style="margin-top:10px;font-size:0.85rem;color:var(--muted);">
+    <div style="margin-top:8px;font-size:0.8rem;color:var(--muted);">
       Actuel : <span id="goal-lbl" style="color:var(--accent);font-weight:700;">--</span>
     </div>
   </div>
-
   <div class="card">
     <div class="ct">💾 Sauvegarde des données</div>
-    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px;">Exporte tes données avant de changer de téléphone. Importe-les sur le nouveau.</p>
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">Exporte avant de changer de téléphone. Importe sur le nouveau.</p>
     <div class="btn-row">
       <button class="btn bg" onclick="exportData()">⬆️ Exporter</button>
       <button class="btn ba" onclick="document.getElementById('import-file').click()">⬇️ Importer</button>
     </div>
     <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
-    <div id="import-status" style="font-size:0.82rem;color:var(--ok);margin-top:10px;text-align:center;"></div>
+    <div id="import-status" style="font-size:0.75rem;color:var(--ok);margin-top:8px;text-align:center;"></div>
   </div>
-
   <div class="card">
     <div class="ct">Effacer les données</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="display:flex;flex-direction:column;gap:8px;">
       <button class="btn bd" onclick="clearSection('weight')">Effacer historique poids</button>
       <button class="btn bd" onclick="clearSection('bp')">Effacer historique tension</button>
+      <button class="btn bd" onclick="clearSection('doc')">Effacer suivi médecin</button>
       <button class="btn bd" onclick="clearAll()">Tout effacer</button>
     </div>
   </div>
-
   <div class="card">
     <div class="ct">Références tension</div>
-    <div style="font-size:0.9rem;color:var(--muted);line-height:2.2;">
+    <div style="font-size:0.82rem;color:var(--muted);line-height:2;">
       <span style="color:var(--ok);">●</span> Normale : &lt; 130/80 mmHg<br>
       <span style="color:var(--warn);">●</span> Limite haute : 130–139 / 80–89<br>
       <span style="color:var(--danger);">●</span> Élevée : ≥ 140/90 mmHg<br>
@@ -253,17 +278,29 @@ input::placeholder{color:#9ca3af;font-size:1rem;}
   </div>
 </div>
 
+<!-- NAV -->
 <div class="bnav">
   <div class="ni active" onclick="switchTab('med',this)"><div class="ni-ico">💊</div><div>Médocs</div></div>
   <div class="ni" onclick="switchTab('weight',this)"><div class="ni-ico">⚖️</div><div>Poids</div></div>
   <div class="ni" onclick="switchTab('bp',this)"><div class="ni-ico">❤️</div><div>Tension</div></div>
+  <div class="ni" onclick="switchTab('doc',this)"><div class="ni-ico">🩺</div><div>Médecin</div></div>
   <div class="ni" onclick="switchTab('settings',this)"><div class="ni-ico">⚙️</div><div>Réglages</div></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-let S={meds:[],weights:[],bps:[],weightGoal:null};
+// Fonctions globales accessibles depuis les onclick inline
+window.toggleTaken=toggleTaken;
+window.editStock=editStock;
+window.saveStock=saveStock;
+window.cancelStock=cancelStock;
+window.removeMed=removeMed;
+window.addNote=addNote;
+window.removeNote=removeNote;
+window.removeSubject=removeSubject;
+
+let S={meds:[],weights:[],bps:[],weightGoal:null,subjects:[]};
 function load(){try{const s=localStorage.getItem('vitalcheck_v1');if(s)S={...S,...JSON.parse(s)};}catch(e){}}
 function save(){localStorage.setItem('vitalcheck_v1',JSON.stringify(S));}
 function today(){return new Date().toISOString().slice(0,10);}
@@ -282,42 +319,34 @@ function switchTab(n,el){
 
 function openClock(){
   window.location.href='intent://alarm#Intent;action=android.intent.action.SET_ALARM;end';
-  setTimeout(()=>{window.location.href='intent://#Intent;action=com.google.android.deskclock;package=com.google.android.deskclock;end';},300);
 }
 
-// EXPORT
+// EXPORT / IMPORT
 function exportData(){
   const json=JSON.stringify(S,null,2);
   const blob=new Blob([json],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   const d=new Date();
-  const fname=`vitalcheck_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
-  a.href=url;a.download=fname;a.click();
-  URL.revokeObjectURL(url);
-  toast('Données exportées ✓');
+  a.href=url;
+  a.download=`vitalcheck_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
+  a.click();URL.revokeObjectURL(url);toast('Données exportées ✓');
 }
-
-// IMPORT
 function importData(event){
-  const file=event.target.files[0];
-  if(!file)return;
+  const file=event.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=function(e){
     try{
       const data=JSON.parse(e.target.result);
-      if(!data.meds||!data.weights||!data.bps){
-        toast('Fichier invalide');return;
-      }
+      if(!data.meds||!data.weights||!data.bps){toast('Fichier invalide');return;}
       if(!confirm('Importer ces données ? Tes données actuelles seront remplacées.'))return;
-      S={meds:data.meds||[],weights:data.weights||[],bps:data.bps||[],weightGoal:data.weightGoal||null};
+      S={meds:data.meds||[],weights:data.weights||[],bps:data.bps||[],weightGoal:data.weightGoal||null,subjects:data.subjects||[]};
       save();renderAll();
-      document.getElementById('import-status').textContent='✓ Données importées avec succès';
+      document.getElementById('import-status').textContent='✓ Import réussi';
       toast('Import réussi ✓');
     }catch(err){toast('Erreur lors de l\'import');}
   };
-  reader.readAsText(file);
-  event.target.value='';
+  reader.readAsText(file);event.target.value='';
 }
 
 // MEDS
@@ -347,10 +376,30 @@ function removeMed(id){
   S.meds=S.meds.filter(m=>m.id!==id);
   save();renderMeds();renderAlarms();
 }
+function editStock(id){
+  const el=document.getElementById('stock-edit-'+id);
+  if(!el)return;
+  const open=el.classList.contains('open');
+  el.classList.toggle('open');
+  if(!open){
+    const m=S.meds.find(x=>x.id===id);
+    if(m)document.getElementById('stock-input-'+id).value=m.stock;
+    document.getElementById('stock-input-'+id).focus();
+  }
+}
+function cancelStock(id){
+  const el=document.getElementById('stock-edit-'+id);
+  if(el)el.classList.remove('open');
+}
+function saveStock(id){
+  const m=S.meds.find(x=>x.id===id);if(!m)return;
+  const n=parseInt(document.getElementById('stock-input-'+id).value);
+  if(isNaN(n)||n<0){toast('Valeur invalide');return;}
+  m.stock=n;save();renderMeds();toast('Stock mis à jour ✓');
+}
 
 function renderMeds(){
-  const t=today();
-  const we=isWeekend();
+  const t=today();const we=isWeekend();
   const list=document.getElementById('med-list');
   const sd=document.getElementById('stock-display');
   if(!S.meds.length){
@@ -376,32 +425,36 @@ function renderMeds(){
     const pct=Math.min(100,(m.stock/mx)*100);
     const low=m.stock<=m.alert,near=m.stock<=m.alert*2;
     const col=low?'var(--danger)':near?'var(--warn)':'var(--ok)';
-    return`<div style="margin-bottom:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+    return`<div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
         <div>
-          <span style="font-size:1rem;font-weight:600;">${m.name}</span>
-          <div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">Sem. ${m.timeWeek||'--'} · W-E ${m.timeWknd||'--'}</div>
+          <span style="font-size:0.9rem;font-weight:600;">${m.name}</span>
+          <div style="font-size:0.68rem;color:var(--muted);margin-top:1px;">Sem. ${m.timeWeek||'--'} · W-E ${m.timeWknd||'--'}</div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.1rem;font-weight:700;color:${col};">${m.stock} cp</span>
-          <button class="btn bo" style="font-size:0.85rem;padding:6px 12px;" onclick="removeMed(${m.id})">✕</button>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:0.95rem;font-weight:700;color:${col};">${m.stock} cp</span>
+          <button class="btn bo" style="font-size:0.8rem;padding:5px 9px;" onclick="editStock(${m.id})">✏️</button>
+          <button class="btn bd" style="font-size:0.8rem;padding:5px 9px;" onclick="removeMed(${m.id})">✕</button>
         </div>
       </div>
+      <div id="stock-edit-${m.id}" class="inline-edit">
+        <input type="number" id="stock-input-${m.id}" min="0" placeholder="Nouveau stock">
+        <button class="btn ba" style="padding:7px 12px;font-size:0.8rem;" onclick="saveStock(${m.id})">OK</button>
+        <button class="btn bo" style="padding:7px 10px;font-size:0.8rem;" onclick="cancelStock(${m.id})">Annuler</button>
+      </div>
       <div class="sbar-bg"><div class="sbar-fill" style="width:${pct}%;background:${col};"></div></div>
-      ${low?`<div style="font-size:0.85rem;color:var(--danger);margin-top:4px;font-weight:600;">⚠️ Commander maintenant — ${m.stock} comprimé(s) restant(s)</div>`:''}
+      ${low?`<div style="font-size:0.75rem;color:var(--danger);margin-top:3px;font-weight:600;">⚠️ Commander maintenant — ${m.stock} comprimé(s) restant(s)</div>`:''}
     </div>`;
   }).join('');
 }
 
 function renderAlarms(){
   const div=document.getElementById('alarm-display');
-  if(!S.meds.length){
-    div.innerHTML='<div class="empty" style="padding:10px 0;">Aucun médicament enregistré</div>';return;
-  }
+  if(!S.meds.length){div.innerHTML='<div class="empty" style="padding:8px 0;">Aucun médicament enregistré</div>';return;}
   div.innerHTML=S.meds.map(m=>`
     <div class="alarm-info">
       <p>💊 ${m.name}</p>
-      <span>Semaine : <strong>${m.timeWeek||'--'}</strong> &nbsp;·&nbsp; Week-end : <strong>${m.timeWknd||'--'}</strong></span>
+      <span>Semaine : <strong>${m.timeWeek||'--'}</strong> · Week-end : <strong>${m.timeWknd||'--'}</strong></span>
     </div>`).join('');
 }
 
@@ -411,9 +464,8 @@ function logW(){
   const dateVal=document.getElementById('w-date').value;
   if(isNaN(val)||val<30||val>300){toast('Valeur invalide');return;}
   if(!dateVal){toast('Indique une date');return;}
-  // Remplace si même date existe déjà
   const idx=S.weights.findIndex(x=>x.date===dateVal);
-  if(idx!==-1) S.weights.splice(idx,1);
+  if(idx!==-1)S.weights.splice(idx,1);
   S.weights.push({date:dateVal,val});
   S.weights.sort((a,b)=>b.date.localeCompare(a.date));
   if(S.weights.length>120)S.weights=S.weights.slice(0,120);
@@ -428,19 +480,15 @@ function saveGoal(){
 }
 function renderW(){
   const data=[...S.weights].reverse();
-  const latest=S.weights[0];
-  const goal=S.weightGoal;
-  const chip=document.getElementById('goal-chip');
-  const leg=document.getElementById('goal-legend');
+  const latest=S.weights[0];const goal=S.weightGoal;
+  const chip=document.getElementById('goal-chip');const leg=document.getElementById('goal-legend');
   if(goal){chip.style.display='';chip.textContent='Objectif '+goal+' kg';leg.style.display='';}
   else{chip.style.display='none';leg.style.display='none';}
   document.getElementById('goal-lbl').textContent=goal?goal+' kg':'--';
   if(!latest){
     document.getElementById('w-val').innerHTML='--<span class="unit">kg</span>';
-    document.getElementById('w-badge').innerHTML='';
-    document.getElementById('w-trend').innerHTML='';
-    document.getElementById('w-prog').style.width='0%';
-    document.getElementById('w-prog-lbl').textContent='';
+    document.getElementById('w-badge').innerHTML='';document.getElementById('w-trend').innerHTML='';
+    document.getElementById('w-prog').style.width='0%';document.getElementById('w-prog-lbl').textContent='';
     document.getElementById('w-history').innerHTML='<div class="empty">Aucune mesure</div>';
     drawChart([],goal);return;
   }
@@ -473,7 +521,7 @@ function renderW(){
     const dc=!diff?'':(diff<=0?'color:var(--ok)':'color:var(--warn)');
     return`<div class="hi">
       <div><div class="hv">${w.val} kg</div><div class="hd">${fmtD(w.date)}</div></div>
-      ${diff!==null?`<div style="font-size:1rem;font-weight:700;${dc}">${diff>0?'+':''}${diff} kg</div>`:''}
+      ${diff!==null?`<div style="font-size:0.9rem;font-weight:700;${dc}">${diff>0?'+':''}${diff} kg</div>`:''}
     </div>`;
   }).join('')||'<div class="empty">Aucune mesure</div>';
   drawChart(data,goal);
@@ -485,9 +533,9 @@ function drawChart(data,goal){
   if(data.length<2){canvas.style.display='none';empty.style.display='';return;}
   canvas.style.display='';empty.style.display='none';
   const dpr=window.devicePixelRatio||1;
-  const PAD={top:30,right:16,bottom:44,left:52};
-  const dispW=Math.max(data.length*60,canvas.parentElement.clientWidth||320);
-  const dispH=210;
+  const PAD={top:28,right:14,bottom:40,left:46};
+  const dispW=Math.max(data.length*58,canvas.parentElement.clientWidth||300);
+  const dispH=200;
   canvas.style.width=dispW+'px';canvas.style.height=dispH+'px';
   canvas.width=dispW*dpr;canvas.height=dispH*dpr;
   const ctx=canvas.getContext('2d');
@@ -503,40 +551,35 @@ function drawChart(data,goal){
   for(let i=0;i<=4;i++){
     const v=mn+(mx-mn)*(i/4),y=yOf(v);
     ctx.beginPath();ctx.moveTo(PAD.left,y);ctx.lineTo(dispW-PAD.right,y);ctx.stroke();
-    ctx.fillStyle='#6b7280';ctx.font='600 11px Inter,sans-serif';ctx.textAlign='right';
-    ctx.fillText(v.toFixed(1),PAD.left-8,y+4);
+    ctx.fillStyle='#6b7280';ctx.font='600 10px Inter,sans-serif';ctx.textAlign='right';
+    ctx.fillText(v.toFixed(1),PAD.left-6,y+3.5);
   }
   if(goal!==null){
     const gy=yOf(goal);
-    ctx.strokeStyle='#dc2626';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.strokeStyle='#dc2626';ctx.lineWidth=2;ctx.setLineDash([5,4]);
     ctx.beginPath();ctx.moveTo(PAD.left,gy);ctx.lineTo(dispW-PAD.right,gy);ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle='#dc2626';ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='left';
-    ctx.fillText(goal+' kg',PAD.left+6,gy-5);
+    ctx.fillStyle='#dc2626';ctx.font='bold 9px Inter,sans-serif';ctx.textAlign='left';
+    ctx.fillText(goal+' kg',PAD.left+4,gy-4);
   }
   ctx.beginPath();ctx.moveTo(xOf(0),yOf(data[0].val));
   for(let i=1;i<data.length;i++)ctx.lineTo(xOf(i),yOf(data[i].val));
-  ctx.lineTo(xOf(data.length-1),PAD.top+cH);
-  ctx.lineTo(xOf(0),PAD.top+cH);ctx.closePath();
-  ctx.fillStyle='rgba(29,78,216,0.08)';ctx.fill();
-  ctx.strokeStyle='#1d4ed8';ctx.lineWidth=3;ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.lineTo(xOf(data.length-1),PAD.top+cH);ctx.lineTo(xOf(0),PAD.top+cH);ctx.closePath();
+  ctx.fillStyle='rgba(29,78,216,0.07)';ctx.fill();
+  ctx.strokeStyle='#1d4ed8';ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';
   ctx.beginPath();ctx.moveTo(xOf(0),yOf(data[0].val));
   for(let i=1;i<data.length;i++)ctx.lineTo(xOf(i),yOf(data[i].val));
   ctx.stroke();
   const step=data.length<=7?1:data.length<=14?2:Math.ceil(data.length/7);
   data.forEach((d,i)=>{
     const x=xOf(i),y=yOf(d.val);
-    // Point
-    ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);
-    ctx.fillStyle='#fff';ctx.fill();
-    ctx.strokeStyle='#1d4ed8';ctx.lineWidth=2.5;ctx.stroke();
-    // Valeur kg au-dessus du point
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#1d4ed8';ctx.lineWidth=2;ctx.stroke();
     if(i%step===0||i===data.length-1){
-      ctx.fillStyle='#1d4ed8';ctx.font='700 11px Inter,sans-serif';ctx.textAlign='center';
-      ctx.fillText(d.val.toFixed(1),x,y-10);
-      // Date en bas
-      ctx.fillStyle='#6b7280';ctx.font='600 10px Inter,sans-serif';
-      ctx.fillText(fmtS(d.date),x,dispH-8);
+      ctx.fillStyle='#1d4ed8';ctx.font='700 10px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(d.val.toFixed(1),x,y-9);
+      ctx.fillStyle='#6b7280';ctx.font='600 9px Inter,sans-serif';
+      ctx.fillText(fmtS(d.date),x,dispH-6);
     }
   });
 }
@@ -559,7 +602,7 @@ function logBP(){
   if(isNaN(sys)||isNaN(dia)||isNaN(hr)){toast('Remplis tous les champs');return;}
   if(!dateVal){toast('Indique une date');return;}
   const idx=S.bps.findIndex(x=>x.date===dateVal);
-  if(idx!==-1) S.bps.splice(idx,1);
+  if(idx!==-1)S.bps.splice(idx,1);
   S.bps.push({date:dateVal,sys,dia,hr});
   S.bps.sort((a,b)=>b.date.localeCompare(a.date));
   if(S.bps.length>120)S.bps=S.bps.slice(0,120);
@@ -570,12 +613,9 @@ function logBP(){
 function renderBP(){
   const latest=S.bps[0];
   if(!latest){
-    document.getElementById('bp-val').textContent='--/--';
-    document.getElementById('hr-val').textContent='--';
-    document.getElementById('bp-badge').innerHTML='';
-    document.getElementById('hr-badge').innerHTML='';
-    document.getElementById('bp-history').innerHTML='<div class="empty">Aucune mesure</div>';
-    return;
+    document.getElementById('bp-val').textContent='--/--';document.getElementById('hr-val').textContent='--';
+    document.getElementById('bp-badge').innerHTML='';document.getElementById('hr-badge').innerHTML='';
+    document.getElementById('bp-history').innerHTML='<div class="empty">Aucune mesure</div>';return;
   }
   document.getElementById('bp-val').textContent=`${latest.sys}/${latest.dia}`;
   document.getElementById('hr-val').textContent=latest.hr;
@@ -585,8 +625,92 @@ function renderBP(){
   document.getElementById('bp-history').innerHTML=S.bps.slice(0,15).map(b=>{
     const s=bpSt(b.sys,b.dia);
     return`<div class="hi">
-      <div><div class="hv">${b.sys}/${b.dia} <span style="font-size:0.85rem;color:var(--muted);font-weight:400;">mmHg</span></div><div class="hd">${fmtD(b.date)} · ${b.hr} bpm</div></div>
+      <div><div class="hv">${b.sys}/${b.dia} <span style="font-size:0.75rem;color:var(--muted);font-weight:400;">mmHg</span></div>
+      <div class="hd">${fmtD(b.date)} · ${b.hr} bpm</div></div>
       <span class="badge ${s.cls}">${s.label}</span>
+    </div>`;
+  }).join('');
+}
+
+// MEDECIN
+function addSubject(){
+  const name=document.getElementById('doc-subject').value.trim();
+  if(!name){toast('Donne un nom au sujet');return;}
+  S.subjects.push({id:Date.now(),name,notes:[]});
+  save();document.getElementById('doc-subject').value='';
+  toast('Sujet créé ✓');renderDoc();
+}
+function removeSubject(id){
+  if(!confirm('Supprimer ce sujet et toutes ses notes ?'))return;
+  S.subjects=S.subjects.filter(s=>s.id!==id);
+  save();renderDoc();toast('Sujet supprimé');
+}
+function addNote(subjectId){
+  const dateEl=document.getElementById('note-date-'+subjectId);
+  const commentEl=document.getElementById('note-comment-'+subjectId);
+  const painEl=document.getElementById('note-pain-'+subjectId);
+  const dateVal=dateEl.value;const comment=commentEl.value.trim();
+  const pain=parseInt(painEl?painEl.value:5);
+  if(!comment){toast('Écris un commentaire');return;}
+  if(!dateVal){toast('Indique une date');return;}
+  const subj=S.subjects.find(s=>s.id===subjectId);if(!subj)return;
+  subj.notes.push({id:Date.now(),date:dateVal,comment,pain});
+  subj.notes.sort((a,b)=>b.date.localeCompare(a.date));
+  save();commentEl.value='';dateEl.value=today();
+  if(painEl)painEl.value=5;
+  const disp=document.getElementById('pain-display-'+subjectId);
+  if(disp)disp.textContent=5;
+  toast('Note ajoutée ✓');renderDoc();
+}
+function removeNote(subjectId,noteId){
+  if(!confirm('Supprimer cette note définitivement ?'))return;
+  const subj=S.subjects.find(s=>s.id===subjectId);if(!subj)return;
+  subj.notes=subj.notes.filter(n=>n.id!==noteId);
+  save();renderDoc();toast('Note supprimée');
+}
+function painClass(p){return p<=3?'pain-low':p<=6?'pain-mid':'pain-high';}
+
+function renderDoc(){
+  const list=document.getElementById('doc-list');
+  if(!S.subjects.length){list.innerHTML='<div class="empty">Aucun sujet créé</div>';return;}
+  list.innerHTML=S.subjects.map(subj=>{
+    const lastNote=subj.notes[0];
+    const notesHtml=subj.notes.length?subj.notes.map(n=>`
+      <div class="snote">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <span class="snote-date">${fmtD(n.date)}</span>
+            <span class="pain-badge ${painClass(n.pain)}">${n.pain}/10</span>
+          </div>
+          <button class="btn bd" style="font-size:0.8rem;padding:3px 8px;line-height:1;"
+            onclick="removeNote(${subj.id},${n.id})">✕</button>
+        </div>
+        <div class="snote-comment">${n.comment}</div>
+      </div>`).join(''):'<div style="font-size:0.8rem;color:var(--muted);padding:6px 0;">Aucune note</div>';
+    return`<div class="symptom-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="symptom-title">${subj.name}</div>
+          <div class="symptom-meta">${subj.notes.length} note(s)${lastNote?' · Dernière : '+fmtD(lastNote.date):''}</div>
+        </div>
+        <button class="btn bd" style="font-size:0.8rem;padding:3px 8px;line-height:1;"
+          onclick="removeSubject(${subj.id})">✕</button>
+      </div>
+      <div class="symptom-notes" style="margin-top:8px;">${notesHtml}</div>
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+        <label style="margin-top:0;">Nouvelle note</label>
+        <input type="date" id="note-date-${subj.id}" value="${today()}" style="margin-bottom:6px;">
+        <textarea id="note-comment-${subj.id}" placeholder="Décris l'évolution, les symptômes..."></textarea>
+        <label>Niveau de douleur : <span id="pain-display-${subj.id}" style="color:var(--accent);font-weight:700;">5</span>/10</label>
+        <div class="pain-row">
+          <span style="font-size:0.75rem;color:var(--muted);">1</span>
+          <input type="range" id="note-pain-${subj.id}" min="1" max="10" value="5"
+            oninput="document.getElementById('pain-display-${subj.id}').textContent=this.value">
+          <span style="font-size:0.75rem;color:var(--muted);">10</span>
+          <span class="pain-val" id="pain-display-${subj.id}">5</span>
+        </div>
+        <button class="btn ba" onclick="addNote(${subj.id})" style="width:100%;margin-top:8px;">Ajouter la note</button>
+      </div>
     </div>`;
   }).join('');
 }
@@ -596,15 +720,16 @@ function clearSection(w){
   if(!confirm('Effacer cet historique ?'))return;
   if(w==='weight')S.weights=[];
   if(w==='bp')S.bps=[];
+  if(w==='doc')S.subjects=[];
   save();renderAll();toast('Effacé');
 }
 function clearAll(){
   if(!confirm('Tout effacer ? Action irréversible.'))return;
-  S={meds:[],weights:[],bps:[],weightGoal:null};
+  S={meds:[],weights:[],bps:[],weightGoal:null,subjects:[]};
   save();renderAll();toast('Données effacées');
 }
 
-function renderAll(){renderMeds();renderW();renderBP();renderAlarms();}
+function renderAll(){renderMeds();renderW();renderBP();renderDoc();renderAlarms();}
 
 function setDate(){
   const d=new Date();
@@ -614,56 +739,25 @@ function setDate(){
 }
 
 load();setDate();renderAll();
-// Init champs date
 document.getElementById('w-date').value=today();
 document.getElementById('bp-date').value=today();
 
-// Génération icône PWA (💊 sur fond bleu)
-function generateIcon(){
-  const c=document.createElement('canvas');
-  c.width=192;c.height=192;
+// Icône PWA
+(function(){
+  const c=document.createElement('canvas');c.width=192;c.height=192;
   const ctx=c.getContext('2d');
-  // Fond bleu arrondi
-  ctx.fillStyle='#1d4ed8';
-  ctx.beginPath();
-  ctx.roundRect(0,0,192,192,38);
-  ctx.fill();
-  // Gélule : deux demi-ellipses
-  ctx.save();
-  ctx.translate(96,96);
-  ctx.rotate(-Math.PI/4);
-  // Ombre douce
-  ctx.shadowColor='rgba(0,0,0,0.25)';
-  ctx.shadowBlur=8;
-  // Demi gauche (blanc)
-  ctx.beginPath();
-  ctx.ellipse(0,0,52,28,0,Math.PI/2,Math.PI*3/2);
-  ctx.fillStyle='#ffffff';
-  ctx.fill();
-  // Demi droite (rouge clair)
-  ctx.beginPath();
-  ctx.ellipse(0,0,52,28,0,-Math.PI/2,Math.PI/2);
-  ctx.fillStyle='#f87171';
-  ctx.fill();
-  // Contour
+  ctx.fillStyle='#1d4ed8';ctx.beginPath();ctx.roundRect(0,0,192,192,38);ctx.fill();
+  ctx.save();ctx.translate(96,96);ctx.rotate(-Math.PI/4);
+  ctx.shadowColor='rgba(0,0,0,0.2)';ctx.shadowBlur=8;
+  ctx.beginPath();ctx.ellipse(0,0,52,28,0,Math.PI/2,Math.PI*3/2);ctx.fillStyle='#ffffff';ctx.fill();
+  ctx.beginPath();ctx.ellipse(0,0,52,28,0,-Math.PI/2,Math.PI/2);ctx.fillStyle='#f87171';ctx.fill();
   ctx.shadowBlur=0;
-  ctx.beginPath();
-  ctx.ellipse(0,0,52,28,0,0,Math.PI*2);
-  ctx.strokeStyle='rgba(255,255,255,0.6)';
-  ctx.lineWidth=3;
-  ctx.stroke();
-  // Ligne centrale
-  ctx.beginPath();
-  ctx.moveTo(0,-28);ctx.lineTo(0,28);
-  ctx.strokeStyle='rgba(255,255,255,0.5)';
-  ctx.lineWidth=2.5;
-  ctx.stroke();
+  ctx.beginPath();ctx.ellipse(0,0,52,28,0,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=3;ctx.stroke();
   ctx.restore();
   const url=c.toDataURL('image/png');
   document.getElementById('favicon').href=url;
   document.getElementById('apple-icon').href=url;
-}
-generateIcon();
+})();
 </script>
 </body>
 </html>
