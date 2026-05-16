@@ -42,7 +42,7 @@ input[type=number],input[type=text],input[type=time],input[type=date],textarea{
   color:var(--text);font-family:'Inter',sans-serif;font-size:1rem;font-weight:500;
   padding:10px 12px;outline:none;transition:border-color .2s;
 }
-textarea{resize:none;min-height:70px;font-size:0.9rem;}
+textarea{resize:none;font-size:0.9rem;}
 input:focus,textarea:focus{border-color:var(--accent);background:#fff;}
 input::placeholder,textarea::placeholder{color:#9ca3af;font-size:0.85rem;}
 .row{display:flex;gap:8px;align-items:flex-end;margin-top:8px;}
@@ -57,15 +57,33 @@ input::placeholder,textarea::placeholder{color:#9ca3af;font-size:0.85rem;}
 .bg{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-border);}
 .btn-row{display:flex;gap:8px;}
 .btn-row .btn{flex:1;padding:10px 8px;font-size:0.8rem;}
-.med-row{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--bg);border:1.5px solid var(--border);margin-bottom:8px;transition:all .2s;}
-.med-row.taken{border-color:var(--ok-border);background:var(--ok-bg);}
-.med-ico{font-size:1.6rem;flex-shrink:0;}
-.med-name{font-size:0.95rem;font-weight:700;}
-.med-sub{font-size:0.72rem;color:var(--muted);margin-top:2px;}
-.med-time{font-size:0.7rem;color:var(--accent);font-weight:600;margin-top:3px;}
-.chk{margin-left:auto;width:38px;height:38px;border-radius:50%;border:2px solid var(--border);background:#fff;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
-.chk.done{background:var(--ok);border-color:var(--ok);color:#fff;}
-.sbar-bg{height:6px;background:var(--bg);border-radius:3px;margin:7px 0 4px;overflow:hidden;border:1px solid var(--border);}
+
+/* ── MEDICAMENT CARTE ── */
+.med-card{border-radius:16px;padding:16px;margin-bottom:10px;transition:all .3s;border:2px solid transparent;}
+.med-card.not-taken{background:#fef2f2;border-color:#fecaca;}
+.med-card.taken{background:#f0fdf4;border-color:#bbf7d0;}
+.med-card-header{display:flex;align-items:center;gap:12px;}
+.med-status-icon{font-size:2rem;flex-shrink:0;}
+.med-info{flex:1;}
+.med-name{font-size:1.05rem;font-weight:700;}
+.med-sub{font-size:0.72rem;margin-top:2px;}
+.med-card.not-taken .med-sub{color:#b91c1c;}
+.med-card.taken .med-sub{color:var(--ok);}
+.med-time-label{font-size:0.7rem;font-weight:600;margin-top:3px;}
+.med-card.not-taken .med-time-label{color:#b91c1c;}
+.med-card.taken .med-time-label{color:var(--ok);}
+.med-toggle{margin-left:auto;flex-shrink:0;}
+.toggle-btn{width:56px;height:30px;border-radius:15px;border:none;cursor:pointer;position:relative;transition:all .3s;flex-shrink:0;}
+.toggle-btn.off{background:#fecaca;}
+.toggle-btn.on{background:#bbf7d0;}
+.toggle-knob{position:absolute;top:3px;width:24px;height:24px;border-radius:50%;transition:all .3s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle-btn.off .toggle-knob{left:3px;background:#b91c1c;}
+.toggle-btn.on .toggle-knob{left:29px;background:var(--ok);}
+.med-card-status{font-size:0.78rem;font-weight:700;text-align:center;padding:8px;border-radius:10px;margin-top:10px;}
+.med-card.not-taken .med-card-status{background:#fecaca;color:#b91c1c;}
+.med-card.taken .med-card-status{background:#bbf7d0;color:var(--ok);}
+
+.sbar-bg{height:6px;background:rgba(0,0,0,0.06);border-radius:3px;margin:10px 0 4px;overflow:hidden;}
 .sbar-fill{height:100%;border-radius:3px;transition:width .5s ease;}
 .sep{height:1px;background:var(--border);margin:12px 0;}
 .two{display:flex;gap:8px;margin-bottom:10px;}
@@ -88,23 +106,26 @@ input::placeholder,textarea::placeholder{color:#9ca3af;font-size:0.85rem;}
 .alarm-info{background:var(--accent-light);border:1px solid #bfdbfe;border-radius:10px;padding:10px 12px;margin-bottom:8px;}
 .alarm-info p{font-size:0.8rem;color:var(--accent);font-weight:600;margin-bottom:2px;}
 .alarm-info span{font-size:0.72rem;color:var(--muted);}
-.symptom-card{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;}
-.symptom-title{font-size:0.95rem;font-weight:700;color:var(--text);}
-.symptom-meta{font-size:0.72rem;color:var(--muted);margin-top:2px;}
-.snote{padding:8px 0;border-bottom:1px solid var(--border);}
-.snote:last-child{border-bottom:none;}
-.snote-date{font-size:0.7rem;color:var(--muted);font-weight:600;}
-.snote-comment{font-size:0.85rem;margin-top:2px;}
-.pain-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:20px;border-radius:10px;font-size:0.7rem;font-weight:700;margin-left:6px;vertical-align:middle;}
-.pain-low{background:#dcfce7;color:#15803d;}
-.pain-mid{background:#fef9c3;color:#a16207;}
-.pain-high{background:#fee2e2;color:#b91c1c;}
-.pain-row{display:flex;align-items:center;gap:10px;margin-top:4px;}
-.pain-row input[type=range]{flex:1;accent-color:var(--accent);}
-.pain-val{font-size:1rem;font-weight:700;color:var(--accent);min-width:24px;text-align:center;}
 .inline-edit{display:none;gap:8px;align-items:center;margin:6px 0;}
 .inline-edit.open{display:flex;}
 .inline-edit input{flex:1;padding:7px 10px;font-size:0.9rem;border-radius:8px;border:1.5px solid var(--accent);background:#fff;color:var(--text);width:auto;}
+
+/* ── MEDECIN ── */
+#panel-doc{font-size:1rem;}
+#panel-doc label{font-size:0.85rem;}
+#panel-doc .ct{font-size:0.72rem;}
+.doc-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.doc-subject-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.doc-subject-title{font-size:1.1rem;font-weight:700;color:var(--text);flex:1;margin-right:8px;}
+.doc-subject-title-input{font-size:1.1rem;font-weight:700;width:100%;background:var(--bg);border:1.5px solid var(--accent);border-radius:8px;padding:6px 10px;color:var(--text);font-family:'Inter',sans-serif;outline:none;margin-right:8px;flex:1;}
+.doc-meta{font-size:0.8rem;color:var(--muted);margin-bottom:10px;}
+.doc-note-area{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:400;padding:12px;outline:none;transition:border-color .2s;resize:none;min-height:120px;line-height:1.6;}
+.doc-note-area:focus{border-color:var(--accent);background:#fff;}
+.doc-actions{display:flex;gap:8px;margin-top:10px;align-items:center;}
+.doc-save-indicator{font-size:0.75rem;color:var(--ok);font-weight:600;opacity:0;transition:opacity .3s;}
+.doc-save-indicator.show{opacity:1;}
+.doc-btn-group{display:flex;gap:6px;margin-left:auto;}
+
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:#111827;color:#fff;padding:10px 22px;border-radius:20px;font-size:0.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:7px 0 12px;z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,0.06);}
@@ -290,16 +311,6 @@ input::placeholder,textarea::placeholder{color:#9ca3af;font-size:0.85rem;}
 <div class="toast" id="toast"></div>
 
 <script>
-// Fonctions globales accessibles depuis les onclick inline
-window.toggleTaken=toggleTaken;
-window.editStock=editStock;
-window.saveStock=saveStock;
-window.cancelStock=cancelStock;
-window.removeMed=removeMed;
-window.addNote=addNote;
-window.removeNote=removeNote;
-window.removeSubject=removeSubject;
-
 let S={meds:[],weights:[],bps:[],weightGoal:null,subjects:[]};
 function load(){try{const s=localStorage.getItem('vitalcheck_v1');if(s)S={...S,...JSON.parse(s)};}catch(e){}}
 function save(){localStorage.setItem('vitalcheck_v1',JSON.stringify(S));}
@@ -321,7 +332,6 @@ function openClock(){
   window.location.href='intent://alarm#Intent;action=android.intent.action.SET_ALARM;end';
 }
 
-// EXPORT / IMPORT
 function exportData(){
   const json=JSON.stringify(S,null,2);
   const blob=new Blob([json],{type:'application/json'});
@@ -349,7 +359,7 @@ function importData(event){
   reader.readAsText(file);event.target.value='';
 }
 
-// MEDS
+// ── MEDS ──────────────────────────────────────────────────────────
 function addMed(){
   const name=document.getElementById('nm-name').value.trim();
   const stock=parseInt(document.getElementById('nm-stock').value);
@@ -367,8 +377,8 @@ function addMed(){
 function toggleTaken(id){
   const m=S.meds.find(x=>x.id===id);if(!m)return;
   const t=today(),idx=m.takenDates.indexOf(t);
-  if(idx===-1){m.takenDates.push(t);m.stock=Math.max(0,m.stock-1);toast('Pris ✓');}
-  else{m.takenDates.splice(idx,1);m.stock+=1;toast('Marqué non pris');}
+  if(idx===-1){m.takenDates.push(t);m.stock=Math.max(0,m.stock-1);}
+  else{m.takenDates.splice(idx,1);m.stock+=1;}
   save();renderMeds();
 }
 function removeMed(id){
@@ -406,20 +416,31 @@ function renderMeds(){
     list.innerHTML='<div class="empty">Aucun médicament ajouté</div>';
     sd.innerHTML='';return;
   }
+  // Cartes prises/non prises
   list.innerHTML=S.meds.map(m=>{
     const tk=m.takenDates.includes(t);
     const heure=we?(m.timeWknd||'11:00'):(m.timeWeek||'08:45');
     const jourLabel=we?'week-end':'semaine';
-    return`<div class="med-row ${tk?'taken':''}">
-      <div class="med-ico">💊</div>
-      <div>
-        <div class="med-name">${m.name}</div>
-        <div class="med-sub">${tk?"Pris aujourd'hui ✓":"À prendre ce matin"}</div>
-        <div class="med-time">🕐 ${heure} (${jourLabel})</div>
+    const statusText=tk?'✓ Médicament pris aujourd\'hui':'⚠️ Médicament non pris';
+    return`<div class="med-card ${tk?'taken':'not-taken'}">
+      <div class="med-card-header">
+        <div class="med-status-icon">${tk?'✅':'🔴'}</div>
+        <div class="med-info">
+          <div class="med-name">${m.name}</div>
+          <div class="med-sub">${statusText}</div>
+          <div class="med-time-label">🕐 ${heure} (${jourLabel})</div>
+        </div>
+        <div class="med-toggle">
+          <button class="toggle-btn ${tk?'on':'off'}" onclick="toggleTaken(${m.id})">
+            <div class="toggle-knob"></div>
+          </button>
+        </div>
       </div>
-      <button class="chk ${tk?'done':''}" onclick="toggleTaken(${m.id})">${tk?'✓':'○'}</button>
+      <div class="med-card-status">${tk?'PRIS ✓':'À PRENDRE'}</div>
     </div>`;
   }).join('');
+
+  // Stock
   sd.innerHTML=S.meds.map(m=>{
     const mx=Math.max(m.stock,m.alert*4);
     const pct=Math.min(100,(m.stock/mx)*100);
@@ -458,7 +479,7 @@ function renderAlarms(){
     </div>`).join('');
 }
 
-// POIDS
+// ── POIDS ──────────────────────────────────────────────────────────
 function logW(){
   const val=parseFloat(document.getElementById('w-input').value);
   const dateVal=document.getElementById('w-date').value;
@@ -584,7 +605,7 @@ function drawChart(data,goal){
   });
 }
 
-// TENSION
+// ── TENSION ──────────────────────────────────────────────────────
 function bpSt(s,d){
   if(s>=140||d>=90)return{label:'Élevée',cls:'danger'};
   if(s>=130||d>=80)return{label:'Limite haute',cls:'warn'};
@@ -632,90 +653,104 @@ function renderBP(){
   }).join('');
 }
 
-// MEDECIN
+// ── MEDECIN ──────────────────────────────────────────────────────
 function addSubject(){
   const name=document.getElementById('doc-subject').value.trim();
   if(!name){toast('Donne un nom au sujet');return;}
-  S.subjects.push({id:Date.now(),name,notes:[]});
+  S.subjects.unshift({id:Date.now(),name,note:'',updatedAt:today()});
   save();document.getElementById('doc-subject').value='';
   toast('Sujet créé ✓');renderDoc();
 }
+
 function removeSubject(id){
-  if(!confirm('Supprimer ce sujet et toutes ses notes ?'))return;
+  if(!confirm('Supprimer ce sujet ?'))return;
   S.subjects=S.subjects.filter(s=>s.id!==id);
   save();renderDoc();toast('Sujet supprimé');
 }
-function addNote(subjectId){
-  const dateEl=document.getElementById('note-date-'+subjectId);
-  const commentEl=document.getElementById('note-comment-'+subjectId);
-  const painEl=document.getElementById('note-pain-'+subjectId);
-  const dateVal=dateEl.value;const comment=commentEl.value.trim();
-  const pain=parseInt(painEl?painEl.value:5);
-  if(!comment){toast('Écris un commentaire');return;}
-  if(!dateVal){toast('Indique une date');return;}
-  const subj=S.subjects.find(s=>s.id===subjectId);if(!subj)return;
-  subj.notes.push({id:Date.now(),date:dateVal,comment,pain});
-  subj.notes.sort((a,b)=>b.date.localeCompare(a.date));
-  save();commentEl.value='';dateEl.value=today();
-  if(painEl)painEl.value=5;
-  const disp=document.getElementById('pain-display-'+subjectId);
-  if(disp)disp.textContent=5;
-  toast('Note ajoutée ✓');renderDoc();
+
+function saveSubjectTitle(id){
+  const subj=S.subjects.find(s=>s.id===id);if(!subj)return;
+  const inp=document.getElementById('title-input-'+id);
+  const newName=inp?inp.value.trim():'';
+  if(!newName){toast('Le nom ne peut pas être vide');return;}
+  subj.name=newName;
+  subj.updatedAt=today();
+  save();renderDoc();toast('Titre mis à jour ✓');
 }
-function removeNote(subjectId,noteId){
-  if(!confirm('Supprimer cette note définitivement ?'))return;
-  const subj=S.subjects.find(s=>s.id===subjectId);if(!subj)return;
-  subj.notes=subj.notes.filter(n=>n.id!==noteId);
-  save();renderDoc();toast('Note supprimée');
+
+function saveNote(id){
+  const subj=S.subjects.find(s=>s.id===id);if(!subj)return;
+  const area=document.getElementById('note-area-'+id);
+  if(!area)return;
+  subj.note=area.value;
+  subj.updatedAt=today();
+  save();
+  // Indicateur visuel
+  const ind=document.getElementById('save-ind-'+id);
+  if(ind){ind.classList.add('show');setTimeout(()=>ind.classList.remove('show'),2000);}
 }
-function painClass(p){return p<=3?'pain-low':p<=6?'pain-mid':'pain-high';}
+
+let saveTimers={};
+function onNoteInput(id){
+  clearTimeout(saveTimers[id]);
+  saveTimers[id]=setTimeout(()=>saveNote(id),1200);
+}
+
+function toggleEditTitle(id){
+  const titleEl=document.getElementById('title-display-'+id);
+  const inputEl=document.getElementById('title-input-'+id);
+  const editBtn=document.getElementById('title-edit-btn-'+id);
+  if(!titleEl||!inputEl)return;
+  const isEditing=inputEl.style.display!=='none';
+  if(isEditing){
+    saveSubjectTitle(id);
+  } else {
+    titleEl.style.display='none';
+    inputEl.style.display='block';
+    inputEl.value=titleEl.textContent;
+    inputEl.focus();
+    if(editBtn)editBtn.textContent='✓';
+  }
+}
 
 function renderDoc(){
   const list=document.getElementById('doc-list');
   if(!S.subjects.length){list.innerHTML='<div class="empty">Aucun sujet créé</div>';return;}
-  list.innerHTML=S.subjects.map(subj=>{
-    const lastNote=subj.notes[0];
-    const notesHtml=subj.notes.length?subj.notes.map(n=>`
-      <div class="snote">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <span class="snote-date">${fmtD(n.date)}</span>
-            <span class="pain-badge ${painClass(n.pain)}">${n.pain}/10</span>
-          </div>
-          <button class="btn bd" style="font-size:0.8rem;padding:3px 8px;line-height:1;"
-            onclick="removeNote(${subj.id},${n.id})">✕</button>
+  list.innerHTML=S.subjects.map(subj=>`
+    <div class="doc-card">
+      <div class="doc-subject-header">
+        <div style="flex:1;margin-right:8px;">
+          <div id="title-display-${subj.id}" class="doc-subject-title">${subj.name}</div>
+          <input id="title-input-${subj.id}" class="doc-subject-title-input" value="${subj.name}"
+            style="display:none;"
+            onkeydown="if(event.key==='Enter'){toggleEditTitle(${subj.id});}">
+          <div class="doc-meta">Modifié le ${fmtD(subj.updatedAt||today())}</div>
         </div>
-        <div class="snote-comment">${n.comment}</div>
-      </div>`).join(''):'<div style="font-size:0.8rem;color:var(--muted);padding:6px 0;">Aucune note</div>';
-    return`<div class="symptom-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div>
-          <div class="symptom-title">${subj.name}</div>
-          <div class="symptom-meta">${subj.notes.length} note(s)${lastNote?' · Dernière : '+fmtD(lastNote.date):''}</div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="btn bo" id="title-edit-btn-${subj.id}"
+            style="font-size:0.8rem;padding:4px 9px;"
+            onclick="toggleEditTitle(${subj.id})">✏️</button>
+          <button class="btn bd"
+            style="font-size:0.8rem;padding:4px 9px;"
+            onclick="removeSubject(${subj.id})">✕</button>
         </div>
-        <button class="btn bd" style="font-size:0.8rem;padding:3px 8px;line-height:1;"
-          onclick="removeSubject(${subj.id})">✕</button>
       </div>
-      <div class="symptom-notes" style="margin-top:8px;">${notesHtml}</div>
-      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
-        <label style="margin-top:0;">Nouvelle note</label>
-        <input type="date" id="note-date-${subj.id}" value="${today()}" style="margin-bottom:6px;">
-        <textarea id="note-comment-${subj.id}" placeholder="Décris l'évolution, les symptômes..."></textarea>
-        <label>Niveau de douleur : <span id="pain-display-${subj.id}" style="color:var(--accent);font-weight:700;">5</span>/10</label>
-        <div class="pain-row">
-          <span style="font-size:0.75rem;color:var(--muted);">1</span>
-          <input type="range" id="note-pain-${subj.id}" min="1" max="10" value="5"
-            oninput="document.getElementById('pain-display-${subj.id}').textContent=this.value">
-          <span style="font-size:0.75rem;color:var(--muted);">10</span>
-          <span class="pain-val" id="pain-display-${subj.id}">5</span>
+      <textarea
+        id="note-area-${subj.id}"
+        class="doc-note-area"
+        placeholder="Décris tes symptômes, leur évolution, les questions pour ton médecin..."
+        oninput="onNoteInput(${subj.id})">${subj.note||''}</textarea>
+      <div class="doc-actions">
+        <span id="save-ind-${subj.id}" class="doc-save-indicator">Sauvegardé ✓</span>
+        <div class="doc-btn-group">
+          <button class="btn ba" style="font-size:0.8rem;padding:7px 14px;"
+            onclick="saveNote(${subj.id})">Sauvegarder</button>
         </div>
-        <button class="btn ba" onclick="addNote(${subj.id})" style="width:100%;margin-top:8px;">Ajouter la note</button>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
-// CLEAR
+// ── CLEAR ──────────────────────────────────────────────────────────
 function clearSection(w){
   if(!confirm('Effacer cet historique ?'))return;
   if(w==='weight')S.weights=[];
