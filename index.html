@@ -152,9 +152,9 @@ input::placeholder,textarea::placeholder{color:#9ca3af;font-size:0.85rem;}
     <div class="ct" style="margin-bottom:8px;">Ajouter un médicament</div>
     <label>Nom</label>
     <input type="text" id="nm-name" placeholder="ex: Amlodipine">
-    <label>Stock actuel (comprimés)</label>
+    <label>Stock actuel (comprimés) <span style="font-weight:400;color:var(--muted);">— optionnel</span></label>
     <input type="number" id="nm-stock" placeholder="ex: 30">
-    <label>Seuil d'alerte (comprimés restants)</label>
+    <label>Seuil d'alerte (comprimés restants) <span style="font-weight:400;color:var(--muted);">— optionnel</span></label>
     <input type="number" id="nm-alert" placeholder="ex: 7">
     <div class="two-input">
       <div><label>Heure semaine</label><input type="time" id="nm-time-week" value="08:45"></div>
@@ -362,11 +362,13 @@ function importData(event){
 // ── MEDS ──────────────────────────────────────────────────────────
 function addMed(){
   const name=document.getElementById('nm-name').value.trim();
-  const stock=parseInt(document.getElementById('nm-stock').value);
-  const alert=parseInt(document.getElementById('nm-alert').value);
+  const stockRaw=document.getElementById('nm-stock').value;
+  const alertRaw=document.getElementById('nm-alert').value;
+  const stock=stockRaw!==''?parseInt(stockRaw):null;
+  const alert=alertRaw!==''?parseInt(alertRaw):null;
   const timeWeek=document.getElementById('nm-time-week').value||'08:45';
   const timeWknd=document.getElementById('nm-time-wknd').value||'11:00';
-  if(!name||isNaN(stock)||isNaN(alert)){toast('Remplis tous les champs');return;}
+  if(!name){toast('Indique le nom du médicament');return;}
   S.meds.push({id:Date.now(),name,stock,alert,timeWeek,timeWknd,takenDates:[]});
   save();
   ['nm-name','nm-stock','nm-alert'].forEach(id=>document.getElementById(id).value='');
@@ -442,9 +444,27 @@ function renderMeds(){
 
   // Stock
   sd.innerHTML=S.meds.map(m=>{
-    const mx=Math.max(m.stock,m.alert*4);
+    if(m.stock===null||m.stock===undefined){
+      return`<div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.9rem;font-weight:600;">${m.name}</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:0.85rem;color:var(--muted);">Stock non suivi</span>
+            <button class="btn bo" style="font-size:0.8rem;padding:5px 9px;" onclick="editStock(${m.id})">✏️</button>
+            <button class="btn bd" style="font-size:0.8rem;padding:5px 9px;" onclick="removeMed(${m.id})">✕</button>
+          </div>
+        </div>
+        <div id="stock-edit-${m.id}" class="inline-edit">
+          <input type="number" id="stock-input-${m.id}" min="0" placeholder="Stock actuel">
+          <button class="btn ba" style="padding:7px 12px;font-size:0.8rem;" onclick="saveStock(${m.id})">OK</button>
+          <button class="btn bo" style="padding:7px 10px;font-size:0.8rem;" onclick="cancelStock(${m.id})">Annuler</button>
+        </div>
+      </div>`;
+    }
+    const alert=m.alert||0;
+    const mx=Math.max(m.stock,alert*4,10);
     const pct=Math.min(100,(m.stock/mx)*100);
-    const low=m.stock<=m.alert,near=m.stock<=m.alert*2;
+    const low=alert>0&&m.stock<=alert,near=alert>0&&m.stock<=alert*2;
     const col=low?'var(--danger)':near?'var(--warn)':'var(--ok)';
     return`<div style="margin-bottom:14px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
