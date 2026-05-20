@@ -329,7 +329,8 @@ function switchTab(n,el){
 }
 
 function openClock(){
-  window.location.href='intent://alarm#Intent;action=android.intent.action.SET_ALARM;end';
+  window.location.href='intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.samsung.android.app.clockpackage/com.samsung.android.app.clockpackage.alarm.AlarmListActivity;end';
+  setTimeout(()=>{window.location.href='intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=com.google.android.deskclock;end';},400);
 }
 
 function exportData(){
